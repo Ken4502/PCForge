@@ -1,0 +1,13 @@
+
+.header {
+    background-color: #ff9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+body {
+    padding-top: 70px; /* Prevents content from hiding under the fixed header */
+}
+    
