@@ -36,6 +36,7 @@ public class RegistrationServlet extends HttpServlet {
             String password = request.getParameter("password");
             String repass = request.getParameter("repass");
             String address = request.getParameter("address");
+            
             request.getSession().setAttribute("name", name);
             request.getSession().setAttribute("email", email);
             request.getSession().setAttribute("address", address);

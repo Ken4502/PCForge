@@ -26,6 +26,9 @@ public class PageControl extends HttpServlet {
                 break;
             case "login":
                 request.getRequestDispatcher("WEB-INF/Login.jsp").forward(request, response);
+            case "adminlogin":
+                request.getRequestDispatcher("WEB-INF/AdminLogin.jsp").forward(request, response);
+                break;
                 
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Page Not Found");
