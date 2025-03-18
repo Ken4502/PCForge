@@ -29,8 +29,8 @@ public class AdminLoginServlet extends HttpServlet {
             return;
         }
 
-        // SQL Query to get stored hashed password for the given username
-        String sql = "SELECT password FROM Staff WHERE username = ?";
+        // SQL Query to get stored hashed password and is_admin status
+        String sql = "SELECT password, is_admin FROM Staff WHERE username = ?";
         
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
@@ -38,15 +38,21 @@ public class AdminLoginServlet extends HttpServlet {
 
             if (rs.next()) {
                 String storedHash = rs.getString("password"); // Retrieve stored hashed password
+                boolean isAdmin = rs.getBoolean("is_admin");  // Retrieve is_admin value
 
                 // Verify password
                 if (Utils.verifyPassword(password, storedHash)) {
                     // Authentication successful, create session
-                    HttpSession session = request.getSession();
+                    HttpSession session = request.getSession();  
+
                     session.setAttribute("adminname", username);
-                    session.setMaxInactiveInterval(30 * 60); // Set session timeout (30 minutes)
-                    Utils.showAlert(out, "Login successful!", request, response, "controller?");
+                    session.setAttribute("is_admin", isAdmin); // Store admin status in session
                     
+                    System.out.println("Session is_admin: " + session.getAttribute("is_admin"));
+                    session.setMaxInactiveInterval(30 * 60); // Set session timeout (30 minutes)
+
+                    Utils.showAlert(out, "Login successful!", request, response, "controller?");
+
                 } else {
                     Utils.showAlert(out, "Incorrect password!", request, response, "controller?action=adminlogin");
                 }

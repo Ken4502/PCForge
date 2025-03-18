@@ -28,8 +28,9 @@
 
     <%
     if (loggedInAdmin != null) { 
-        // If admin is logged in, show admin logout
+        // If admin is logged in, show admin features
     %>
+        <a href="controller?action=productmanage">Manage Product</a>
         <a href="AdminLogoutServlet">Logout</a>
     <%
     } else if (loggedInUser != null) { 
