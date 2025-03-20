@@ -22,16 +22,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Product</title>
     <style>
-        table {
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
         .img {
             max-width: 50px;
             max-height: 50px;
@@ -39,9 +29,23 @@
     </style>
 </head>
 <body class="body">
+    <%
+        String message = (String) session.getAttribute("message");
+        String messageType = (String) session.getAttribute("messageType");
+        if (message != null) {
+    %>
+        <div class="<%= messageType %>">
+            <%= message %>
+        </div>
+    <%
+        session.removeAttribute("message"); // Remove message after displaying
+        session.removeAttribute("messageType");
+        }
+    %>
 
+    <h2>Product Management</h2>
     <a href="controller?action=productadd">Add Product</a>
-    <h2>Product List</h2>
+    <h3>Product List</h3>
     <table>
         <thead>
             <tr>
@@ -60,14 +64,15 @@
                     <tr>
                         <td><%= product.get("id") %></td>
                         <td><%= product.get("name") %></td>
-                        <td>RM<%= product.get("price") %></td>
+                        <td>RM<%= String.format("%.2f", Double.parseDouble(product.get("price"))) %></td>
                         <td><%= product.get("quantity") %></td>
                         <td><%= product.get("category") %></td>
                         <td><img src="<%= product.get("image") %>" class="img" alt="Product Image"></td>
                         <td>
-                            <a href="ProductEditServlet?id=<%= product.get("id") %>">Edit</a> 
+                            <a href="controller?action=productEdit&id=<%= product.get("id") %>">Edit</a>
                             <% if (isAdmin) { %>|
-                            <a href="ProductDeleteServlet?id=<%= product.get("id") %>" onclick="return confirm('Are you sure?')" >Delete</a>
+                            <a href="controller?action=productDelete&id=<%= product.get("id") %>" 
+                                onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
                             <% } %>
                         </td>
                     </tr>

@@ -1,6 +1,19 @@
-
 .body {
     background-color: #ffcccc;
 }
 
-    
+.body table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.body table th {
+    background-color: #ff9999;
+}
+
+.body table th, 
+.body table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}

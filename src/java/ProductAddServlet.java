@@ -6,11 +6,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/ProductAddServlet")
 public class ProductAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        //Ensure user is logged in
+        if (session == null || session.getAttribute("adminname") == null) {
+           response.sendRedirect("controller?action=login");
+           return;
+        }
         
         // Get form data from request
         String productName = request.getParameter("productname");

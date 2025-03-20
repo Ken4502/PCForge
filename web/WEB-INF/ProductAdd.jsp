@@ -16,8 +16,8 @@
     <input type="hidden" name="action" value="addproduct">
 
     <label>Product name:</label> <input type="text" name="productname" required><br>
-    <label>Price:</label> <input type="text" name="price" required><br>
-    <label>Quantity:</label> <input type="text" name="quantity" required><br>
+    <label>Price:</label> <input type="number" step="0.01" name="price" required><br>
+    <label>Quantity:</label> <input type="number" name="quantity" required><br>
     <label>Image URL:</label> <input type="text" name="image" required><br>
 
     <label>Category:</label><br>

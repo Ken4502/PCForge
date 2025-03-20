@@ -22,6 +22,14 @@ public class ProductManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        HttpSession session = request.getSession(false);
+
+        //Ensure user is logged in
+        if (session == null || session.getAttribute("adminname") == null) {
+           response.sendRedirect("controller?action=login");
+           return;
+        }
+        
         List<Map<String, String>> products = new ArrayList<>();
         
         try (Connection conn = DatabaseConnection.getConnection();
