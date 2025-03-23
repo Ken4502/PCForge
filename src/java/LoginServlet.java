@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         // Get user input
-        String name = request.getParameter("name");
+        String name = request.getParameter("username");
         String password = request.getParameter("password");
 
         Connection conn = DatabaseConnection.getConnection();
