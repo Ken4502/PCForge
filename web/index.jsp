@@ -44,11 +44,13 @@
     } else if (loggedInUser != null) { 
         // If a normal user is logged in, show normal logout
     %>
+        <a href="controller?action=productview">View Product</a>
         <a href="LogoutServlet">Logout</a>
     <%
     } else { 
         // If no one is logged in, show login/register options
     %>
+        <a href="controller?action=productview">View Product</a>
         <a href="controller?action=login">Login</a>
         <a href="controller?action=register">Sign up now!</a>
         <a href="controller?action=adminlogin">Staff Portal</a>

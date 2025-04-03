@@ -1,3 +1,6 @@
+package Controller;
+
+import Util.DatabaseConnection;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,6 +59,12 @@ public class PageControl extends HttpServlet {
                 break;
             case "productDelete":
                 request.getRequestDispatcher("ProductDeleteServlet").forward(request, response);
+                break;
+            case "productview":
+                request.getRequestDispatcher("/UserProductListServlet").forward(request, response);
+                break;
+            case "checkout":
+                request.getRequestDispatcher("CheckoutController").forward(request, response);
                 break;
 
 

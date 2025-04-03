@@ -1,3 +1,6 @@
+package Model;
+
+import Util.DatabaseConnection;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import utils.Utils;
+import Util.Utils;
 
 @WebServlet("/StaffAccountManageServlet")
 public class StaffAccountManageServlet extends HttpServlet {

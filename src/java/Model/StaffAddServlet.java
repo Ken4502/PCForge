@@ -1,3 +1,6 @@
+package Model;
+
+import Util.DatabaseConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -6,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.Utils;
+import Util.Utils;
 
 @WebServlet("/StaffAddServlet")
 public class StaffAddServlet extends HttpServlet {

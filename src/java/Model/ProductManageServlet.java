@@ -1,4 +1,7 @@
+package Model;
 
+
+import Util.DatabaseConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

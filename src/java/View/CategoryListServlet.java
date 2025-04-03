@@ -1,3 +1,7 @@
+package View;
+
+import Model.Category;
+import Util.DatabaseConnection;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
