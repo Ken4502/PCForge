@@ -138,16 +138,16 @@
                             <td><%= count++ %></td>
                             <!-- Add product-name class to prevent wrapping -->
                             <td style="white-space: pre-wrap;"><%= productName %></td>
-                            <td><%= price %></td>
+                            <td><%= String.format("%.2f", price) %></td>
                             <td><%= quantity %></td>
-                            <td><%= totalPrice %></td>
+                            <td><%= String.format("%.2f", totalPrice) %></td>
                         </tr>
                     <% 
                         } 
                     %>
                     <tr>
                         <td colspan="4" style="text-align: right;"><b>Grand Total</b></td>
-                        <td><b><%= grandTotal %></b></td>
+                        <td><b><%= String.format("%.2f", grandTotal) %></b></td>
                     </tr>
                 </tbody>
             </table>
