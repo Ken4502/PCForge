@@ -10,6 +10,7 @@
     <h2>Staff Management</h2>
     <form action="StaffAddServlet" method="post">
         <button type="submit">Add New Staff</button>
+        <button type="button" onclick="location.href='controller?';">Back</button>
     </form>
     <h3>Staff List</h3>
     <table>

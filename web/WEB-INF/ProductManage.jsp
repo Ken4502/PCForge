@@ -9,6 +9,16 @@
     
     Object isAdminObj = session.getAttribute("is_admin"); // Get session attribute
     boolean isAdmin = isAdminObj != null && (Boolean) isAdminObj; // Ensure it's a boolean
+    
+    String sortBy = (String) request.getAttribute("sortBy");
+    String sortOrder = (String) request.getAttribute("sortOrder");
+    
+    if (sortBy == null) {
+        sortBy = "product_name";  // Default sort by product name
+    }
+    if (sortOrder == null) {
+        sortOrder = "ASC";  // Default order is ascending
+    }
 
 
 %>
@@ -25,6 +35,16 @@
         .img {
             max-width: 50px;
             max-height: 50px;
+        }       
+        .sort-arrow {
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .asc:before {
+            content: "↑"; 
+        }
+        .desc:before {
+            content: "↓"; 
         }
     </style>
 </head>
@@ -45,15 +65,36 @@
 
     <h2>Product Management</h2>
     <a href="controller?action=productadd">Add Product</a>
+    <button type="button" onclick="location.href='controller?';">Back</button>
     <h3>Product List</h3>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Category</th>
+                <th>ID
+                <a href="ProductManageServlet?sortBy=id&sortOrder=<%= "id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>">
+                        <span class="sort-arrow <%= "id".equals(sortBy) ? sortOrder.toLowerCase() : "asc" %>"></span>
+                    </a>
+                </th>
+                <th>Product Name
+                <a href="ProductManageServlet?sortBy=product_name&sortOrder=<%= "product_name".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>">
+                        <span class="sort-arrow <%= "product_name".equals(sortBy) ? sortOrder.toLowerCase() : "asc" %>"></span>
+                    </a>
+                </th>
+                <th>Price
+                <a href="ProductManageServlet?sortBy=price&sortOrder=<%= "price".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>">
+                        <span class="sort-arrow <%= "price".equals(sortBy) ? sortOrder.toLowerCase() : "asc" %>"></span>
+                    </a>
+                </th>
+                <th>Quantity
+                <a href="ProductManageServlet?sortBy=quantity&sortOrder=<%= "quantity".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>">
+                        <span class="sort-arrow <%= "quantity".equals(sortBy) ? sortOrder.toLowerCase() : "asc" %>"></span>
+                    </a>
+                </th>
+                <th>Category
+                <a href="ProductManageServlet?sortBy=category_id&sortOrder=<%= "category_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC" %>">
+                        <span class="sort-arrow <%= "category_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc" %>"></span>
+                    </a>
+                </th>
                 <th>Image</th>
                 <th>Actions</th>
             </tr>

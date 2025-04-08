@@ -12,13 +12,13 @@
 </head>
 <body class="body">
     <h2>Add Product</h2>
-<form action="ProductAddServlet" method="post">
+<form action="ProductAddServlet" method="post" enctype="multipart/form-data">
     <input type="hidden" name="action" value="addproduct">
 
     <label>Product name:</label> <input type="text" name="productname" required><br>
-    <label>Price:</label> <input type="number" step="0.01" name="price" required><br>
-    <label>Quantity:</label> <input type="number" name="quantity" required><br>
-    <label>Image URL:</label> <input type="text" name="image" required><br>
+    <label>Price:</label> <input type="number" step="0.01" name="price" min="0" required><br>
+    <label>Quantity:</label> <input type="number" name="quantity" min="0" required><br>
+    <label>Image URL:</label> <input type="file" name="image" accept=".png, .jpg, .jpeg" required><br>
 
     <label>Category:</label><br>
     <c:forEach var="category" items="${categoryList}">
@@ -28,6 +28,8 @@
     <button type="button" onclick="addCategory()">Add New Category</button> <br><br>
         
     <button type="submit">Add Product</button>
+    
+    <button type="button" onclick="location.href='ProductManageServlet';">Back</button>
 </form>
     
 </body>
@@ -45,8 +47,12 @@
             })
             .then(response => response.text())
             .then(data => {
+                if (data.includes("Invalid")){
+                    alert(data); // Show validation error, don't reload
+                }else{
                 alert(data); // Show success message
                 location.reload(); // Refresh the page to show the new category
+             }
             })
             .catch(error => console.error('Error:', error));
         }

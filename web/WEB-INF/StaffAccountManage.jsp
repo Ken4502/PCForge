@@ -35,6 +35,7 @@
             <br>
             <br>
             <button type="submit">Update Password</button>
+            <button type="button" onclick="location.href='controller?';">Back</button>
         </form>
 
     </body>

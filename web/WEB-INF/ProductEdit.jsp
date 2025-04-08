@@ -26,21 +26,25 @@
                 int selectedCategoryId = (categoryStr != null && !categoryStr.isEmpty()) ? Integer.parseInt(categoryStr) : -1;
         %>
 
-        <form action="controller?action=productUpdate" method="POST">
+        <form action="controller?action=productUpdate" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<%= product.get("id") %>">
 
             <label>Product Name:</label>
             <input type="text" name="name" value="<%= product.get("name") %>" required><br>
 
             <label>Price:</label>
-            <input type="number" step="0.01" name="price" value="<%= price %>" required><br>
+            <input type="number" step="0.01" name="price" value="<%= price %>" min="0.1" required><br>
 
             <label>Quantity:</label>
-            <input type="number" name="quantity" value="<%= quantity %>" required><br>
+            <input type="number" name="quantity" value="<%= quantity %>" min="1" required><br>
             
-            <label>Image URL:</label>
-            <input type="text" name="image_url" value="<%= imageUrl %>" required><br>
+            <label>Current Image:</label>
+            <img src="<%= imageUrl %>" alt="Product Image" width="150"><br><br>
+            <input type="hidden" name="existingImageUrl" value="<%= imageUrl %>">
             
+            <label>Upload New Image:</label>
+            <input type="file" name="image" accept=".png, .jpg, .jpeg"><br>
+        
             <label>Category:</label><br>
             <% 
                 for (HashMap<String, String> category : categoryList) { 
@@ -52,6 +56,7 @@
             <% } %>
 
             <button type="submit">Update</button>
+            <button type="button" onclick="location.href='ProductManageServlet';">Back</button>
         </form>
 
         <%
