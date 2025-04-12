@@ -64,6 +64,11 @@
     %>
 
     <h2>Product Management</h2>
+    <form action="ProductSearchServlet" method="GET">
+            <input type="hidden" name="action" value="search">
+            <input type="text" name="search" placeholder="Enter product name" required>
+            <input type="submit" value="Search">
+        </form>
     <a href="controller?action=productadd">Add Product</a>
     <button type="button" onclick="location.href='controller?';">Back</button>
     <h3>Product List</h3>

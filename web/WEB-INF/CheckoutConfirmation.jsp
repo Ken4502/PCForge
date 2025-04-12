@@ -147,7 +147,7 @@
                     %>
                     <tr>
                         <td colspan="4" style="text-align: right;"><b>Grand Total</b></td>
-                        <td><b><%= String.format("%.2f", grandTotal) %></b></td>
+                        <td><b>RM <%= String.format("%.2f", grandTotal) %></b></td>
                     </tr>
                 </tbody>
             </table>
