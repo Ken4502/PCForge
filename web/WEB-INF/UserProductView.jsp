@@ -45,7 +45,6 @@
             color: #555;
         }
 
-        /* Normal Submit Button */
         .submitButton {
             background-color: #4CAF50;
             color: white;
@@ -63,16 +62,14 @@
             background-color: #45a049;
         }
 
-        /* Disabled Button */
         .disabledButton {
-            background-color: #cccccc; /* Greyed out */
+            background-color: #cccccc;
             color: #666666;
             cursor: not-allowed;
         }
 
-        /* Prevent hover effect on disabled button */
         .disabledButton:hover {
-            background-color: #cccccc; /* Same as normal state */
+            background-color: #cccccc;
             color: #666666;
         }
 
@@ -112,55 +109,66 @@
                             <img src="<%= product.get("image_url") %>" alt="<%= product.get("name") %>" />
                             <h4><%= product.get("name") %></h4>
                             <p>Price: RM <%= product.get("price") %></p>
-                            <label>Quantity:</label>
-                            <input type="number" name="quantity_<%= product.get("id") %>" 
-                                   value="0" max="<%= product.get("quantity") %>" min="0" 
-                                   oninput="validateInput(this)" />
-                            <input type="hidden" name="product_id_<%= product.get("id") %>" 
-                                   value="<%= product.get("id") %>" />
+
+                            <% if (loggedInUser != null) { %>
+                                <label>Quantity:</label>
+                                <input type="number" name="quantity_<%= product.get("id") %>" 
+                                       value="0" max="<%= product.get("quantity") %>" min="0" 
+                                       oninput="validateInput(this)" />
+                                <input type="hidden" name="product_id_<%= product.get("id") %>" 
+                                       value="<%= product.get("id") %>" />
+                            <% } else { %>
+                                <p>Available: <%= product.get("quantity") %></p>
+                            <% } %>
                         </div>
                     <% } %>
                 </div>
-            <% } %>
-        <% } %>
+        <% 
+                } 
+            } 
+        %>
 
-        <!-- Submit button -->
-        <button type="submit" class="submitButton disabledButton" disabled>Proceed to Checkout</button>
+        <% if (loggedInUser != null) { %>
+            <div class="button-container">
+                <button type="submit" class="submitButton disabledButton" disabled>Proceed to Checkout</button>
+            </div>
+        <% } %>
     </form>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        checkQuantities();
+        const isLoggedIn = <%= (loggedInUser != null) %>;
 
-        let form = document.querySelector("form");
-        let inputs = document.querySelectorAll('input[type="number"]');
+        if (isLoggedIn) {
+            checkQuantities();
 
-        // Attach event listeners to quantity inputs
-        inputs.forEach(input => {
-            input.addEventListener("input", checkQuantities);
-        });
+            let form = document.querySelector("form");
+            let inputs = document.querySelectorAll('input[type="number"]');
 
-        // Handle form submission
-        form.addEventListener("submit", function (event) {
-            event.preventDefault(); // Prevent normal form submission
-
-            let url = new URL(form.action, window.location.origin);
-            
             inputs.forEach(input => {
-                let quantity = parseInt(input.value);
-                let productId = input.name.replace("quantity_", "product_id_");
-
-                if (quantity > 0) {
-                    // Append only products with quantity > 0 to the URL
-                    url.searchParams.append(input.name, quantity);
-                    url.searchParams.append(productId, input.nextElementSibling.value);
-                }
+                input.addEventListener("input", checkQuantities);
             });
 
-            if (url.searchParams.toString() !== "") {
-                window.location.href = url.toString(); // Redirect with filtered parameters
-            }
-        });
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent normal form submission
+
+                let url = new URL(form.action, window.location.origin);
+
+                inputs.forEach(input => {
+                    let quantity = parseInt(input.value);
+                    let productId = input.name.replace("quantity_", "product_id_");
+
+                    if (quantity > 0) {
+                        url.searchParams.append(input.name, quantity);
+                        url.searchParams.append(productId, input.nextElementSibling.value);
+                    }
+                });
+
+                if (url.searchParams.toString() !== "") {
+                    window.location.href = url.toString();
+                }
+            });
+        }
     });
 
     function checkQuantities() {
@@ -174,7 +182,6 @@
             }
         });
 
-        // Toggle button state based on input values
         if (allZero) {
             submitButton.classList.add('disabledButton');
             submitButton.disabled = true;
@@ -189,11 +196,10 @@
         const max = parseInt(input.max, 10);
         const value = parseInt(input.value, 10);
 
-        // Ensure the value is within the defined min and max
         if (value < min) {
-            input.value = min; // Set the value to the minimum if it's below
+            input.value = min;
         } else if (value > max) {
-            input.value = max; // Set the value to the maximum if it's above
+            input.value = max;
         }
     }
 </script>

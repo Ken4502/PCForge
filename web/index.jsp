@@ -14,6 +14,7 @@
         <%
         HttpSession sessionObj = request.getSession(false);
         String loggedInUser = (sessionObj != null) ? (String) sessionObj.getAttribute("username") : null;
+        String loggedInUserID = (sessionObj != null) ? (String) (String.valueOf(sessionObj.getAttribute("userId"))) : null;
         String loggedInAdmin = (sessionObj != null) ? (String) sessionObj.getAttribute("adminname") : null;
         Object isAdminObj = session.getAttribute("is_admin"); // Get session attribute
         boolean isAdmin = isAdminObj != null && (Boolean) isAdminObj; // Ensure it's a boolean
@@ -44,6 +45,7 @@
     } else if (loggedInUser != null) { 
         // If a normal user is logged in, show normal logout
     %>
+        <a href="controller?action=orderTracking">Track Orders</a>
         <a href="controller?action=productview">View Product</a>
         <a href="LogoutServlet">Logout</a>
     <%

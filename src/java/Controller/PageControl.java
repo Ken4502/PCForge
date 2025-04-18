@@ -1,17 +1,24 @@
 package Controller;
 
-import Util.DatabaseConnection;
 import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
+import java.sql.SQLException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import Util.DatabaseConnection;
+import Model.*;
 
 @MultipartConfig
 @WebServlet("/controller")
@@ -20,8 +27,13 @@ public class PageControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         //System.out.println("Controller received request: " + request.getQueryString());
-
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
+        
+        System.out.println("Controller received request: " + request.getQueryString());
+        System.out.println("Request Method: " + request.getMethod()); // Debugging request method
+
+        System.out.println("Action received in doGet: " + action);
         
         if (action == null) {
             action = "home";
@@ -67,6 +79,51 @@ public class PageControl extends HttpServlet {
             case "checkout":
                 request.getRequestDispatcher("CheckoutController").forward(request, response);
                 break;
+            case "orderTracking":
+                request.getRequestDispatcher("OrderTrackingController").forward(request, response);
+                break;
+            case "checkoutUpdate":
+
+                List<HashMap<String, String>> selectedProducts =
+                    (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
+
+                if (selectedProducts == null || selectedProducts.isEmpty()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No products selected.");
+                    return;
+                }
+
+                request.setAttribute("selectedProducts", selectedProducts);
+                System.out.println("Session Cart: " + session.getAttribute("selectedProducts"));
+                System.out.println("Request Cart Set: " + selectedProducts);
+                request.getRequestDispatcher("/WEB-INF/CheckoutConfirmation.jsp").forward(request, response);
+                break;
+
+            case "addressConfirmation":
+                List<HashMap<String, String>> selectedProductsForPayment = 
+                    (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
+
+                if (selectedProductsForPayment == null || selectedProductsForPayment.isEmpty()) {
+                    System.out.println("No products available for payment.");
+                    response.sendRedirect("controller?action=checkoutUpdate");
+                    return;
+                }
+                
+                try {
+                    Connection conn = DatabaseConnection.getConnection();
+                    UserDAO userDAO = new UserDAO(conn);
+                    System.out.println("User ID from session: " + String.valueOf(session.getAttribute("userId")));
+                    int userId = (int)(session.getAttribute("userId"));
+                    User user = userDAO.getUserById(userId);
+                    request.setAttribute("user", user);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                
+                request.setAttribute("selectedProducts", selectedProductsForPayment);
+                request.getRequestDispatcher("/WEB-INF/addressConfirmation.jsp").forward(request, response);
+                break;
+                
+
 
 
             default:
@@ -106,6 +163,15 @@ public class PageControl extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/ProductUpdateServlet");
             dispatcher.forward(request, response);
         } 
+        else if ("updateCart".equals(action)) {
+            request.getRequestDispatcher("/updateCart").forward(request, response);
+        }
+        else if ("checkout".equals(action)) {
+            request.getRequestDispatcher("/checkoutUpdate").forward(request, response);
+        }
+        else if ("processPayment".equals(action)) {
+            request.getRequestDispatcher("/processPayment").forward(request, response);
+        }
         else {
             response.getWriter().write("Invalid action.");
         }

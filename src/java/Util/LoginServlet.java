@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         // SQL Query to get stored hashed password for the given username
-        String sql = "SELECT password FROM Users WHERE name = ?";
+        String sql = "SELECT * FROM Users WHERE name = ?";
         
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -41,12 +41,16 @@ public class LoginServlet extends HttpServlet {
 
             if (rs.next()) {
                 String storedHash = rs.getString("password"); // Retrieve stored hashed password
-
+                int userId = Integer.parseInt(rs.getString("id"));
+                
                 // Verify password
                 if (Utils.verifyPassword(password, storedHash)) {
+                    
                     // Authentication successful, create session
                     HttpSession session = request.getSession();
                     session.setAttribute("username", name);
+                    session.setAttribute("userId", userId);
+                    
                     session.setMaxInactiveInterval(30 * 60); // Set session timeout (30 minutes)
                     Utils.showAlert(out, "Login successful!", request, response, "controller?");
                     

@@ -11,8 +11,9 @@ public class DatabaseConnection {
 
     public static Connection getConnection() {
         try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
             return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             return null;
         }
