@@ -28,12 +28,12 @@
 
         <form action="StaffAccountManageServlet" method="post">
             <label>Username: </label>
-            <input type="text" name="username" value="<%= adminname %>" readonly><br>
+            <input type="text" name="username" value="<%= adminname %>" readonly><br><br>
 
             <label>New Password: </label>
             <input type="password" name="newPassword" required>
-            <br>
-            <br>
+            </br>
+            </br>
             <button type="submit">Update Password</button>
             <button type="button" onclick="location.href='controller?';">Back</button>
         </form>

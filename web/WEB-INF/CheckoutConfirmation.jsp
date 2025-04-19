@@ -53,7 +53,10 @@
           int qty = Integer.parseInt(item.get("quantity"));
           grandTotal += price * qty;
         }
-        double deliveryFee = (double)10.00;
+        double deliveryFee = (double)70.00;
+        if (grandTotal >= 10000){ 
+            deliveryFee = (double)0.00;
+        }
         double serviceTax = (double)(grandTotal * 0.10);
         double finalTotal = grandTotal + deliveryFee + serviceTax;
     %>

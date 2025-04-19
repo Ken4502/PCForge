@@ -82,22 +82,6 @@ public class PageControl extends HttpServlet {
             case "orderTracking":
                 request.getRequestDispatcher("OrderTrackingController").forward(request, response);
                 break;
-            case "checkoutUpdate":
-
-                List<HashMap<String, String>> selectedProducts =
-                    (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
-
-                if (selectedProducts == null || selectedProducts.isEmpty()) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No products selected.");
-                    return;
-                }
-
-                request.setAttribute("selectedProducts", selectedProducts);
-                System.out.println("Session Cart: " + session.getAttribute("selectedProducts"));
-                System.out.println("Request Cart Set: " + selectedProducts);
-                request.getRequestDispatcher("/WEB-INF/CheckoutConfirmation.jsp").forward(request, response);
-                break;
-
             case "addressConfirmation":
                 List<HashMap<String, String>> selectedProductsForPayment = 
                     (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
@@ -135,7 +119,7 @@ public class PageControl extends HttpServlet {
         throws ServletException, IOException {
         System.out.println("Controller received request: " + request.getQueryString());
         System.out.println("Request Method: " + request.getMethod()); // Debugging request method
-
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
         System.out.println("Action received in doPost: " + action);
 
@@ -165,6 +149,20 @@ public class PageControl extends HttpServlet {
         } 
         else if ("updateCart".equals(action)) {
             request.getRequestDispatcher("/updateCart").forward(request, response);
+        }
+        else if ("checkoutUpdate".equals(action)) {
+            List<HashMap<String, String>> selectedProducts =
+                    (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
+
+                if (selectedProducts == null || selectedProducts.isEmpty()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No products selected.");
+                    return;
+                }
+
+                request.setAttribute("selectedProducts", selectedProducts);
+                System.out.println("Session Cart: " + session.getAttribute("selectedProducts"));
+                System.out.println("Request Cart Set: " + selectedProducts);
+                request.getRequestDispatcher("/WEB-INF/CheckoutConfirmation.jsp").forward(request, response);
         }
         else if ("checkout".equals(action)) {
             request.getRequestDispatcher("/checkoutUpdate").forward(request, response);
