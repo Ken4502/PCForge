@@ -109,7 +109,7 @@
                             <img src="<%= product.get("image_url") %>" alt="<%= product.get("name") %>" />
                             <h4><%= product.get("name") %></h4>
                             <p>Price: RM <%= product.get("price") %></p>
-
+                            <p>Available: <%= product.get("quantity") %></p>
                             <% if (loggedInUser != null) { %>
                                 <label>Quantity:</label>
                                 <input type="number" name="quantity_<%= product.get("id") %>" 
@@ -117,9 +117,8 @@
                                        oninput="validateInput(this)" />
                                 <input type="hidden" name="product_id_<%= product.get("id") %>" 
                                        value="<%= product.get("id") %>" />
-                            <% } else { %>
-                                <p>Available: <%= product.get("quantity") %></p>
                             <% } %>
+                                
                         </div>
                     <% } %>
                 </div>

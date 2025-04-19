@@ -74,6 +74,11 @@
             <%
               int idx = 0, count = 1;
               for (HashMap<String,String> item : cart) {
+                String idStr = item.get("id");
+                int id = 0; // fallback default
+                if (idStr != null && !idStr.isEmpty() && !idStr.equals("null")) {
+                    id = Integer.parseInt(idStr);
+                }
                 String name = item.get("name");
                 double price = Double.parseDouble(item.get("price"));
                 int qty = Integer.parseInt(item.get("quantity"));
@@ -90,6 +95,7 @@
                        min="1"
                        onchange="checkCartChanges(<%= idx %>)"
                        data-orig="<%= qty %>">
+                <input type="hidden" name="product_id_<%= idx %>" value="<%= id %>">
                 <input type="hidden" name="name_<%= idx %>" value="<%= name %>">
                 <input type="hidden" name="price_<%= idx %>" value="<%= price %>">
               </td>
@@ -131,7 +137,7 @@
         <button type="submit"
                 id="updateBtn"
                 class="confirmButton"
-                style="display:none;">
+                style="display:none;margin-top: 36px;">
           Update Cart
         </button>
       </form>
@@ -142,12 +148,17 @@
           int idxCheckout = 0;
           for (HashMap<String,String> item : cart) {
             String nameCheckout = item.get("name");
-            String productName = item.get("id");
+            String productId = item.get("id");
+            if (productId == null){
+                productId = "0";
+            }
             double priceCheckout = Double.parseDouble(item.get("price"));
             int qtyCheckout = Integer.parseInt(item.get("quantity"));
-        %>
+        %>  
+            <input type="hidden" name="id_<%= idx %>" value="<%= productId %>">
+
             <input type="hidden" name="quantity_<%=idxCheckout%>" value="<%= qtyCheckout %>">
-            <input type="hidden" name="product_id_<%=idxCheckout%>" value="<%= productName %>">
+            <input type="hidden" name="product_id_<%=idxCheckout%>" value="<%= productId %>">
             <input type="hidden" name="price_<%=idxCheckout%>" value="<%= priceCheckout %>">
             <input type="hidden" name="name_<%=idxCheckout%>" value="<%= nameCheckout %>">
         <%

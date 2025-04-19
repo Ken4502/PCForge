@@ -39,7 +39,7 @@ public class PaymentProcessingServlet extends HttpServlet {
         if (selectedProducts != null) {
             for (HashMap<String, String> item : selectedProducts) {
                 System.out.println("Product: " + item.get("name"));
-                System.out.println("  Product ID: " + item.get("product_id"));
+                System.out.println("  Product ID: " + item.get("id"));
                 System.out.println("  Price: " + item.get("price"));
                 System.out.println("  Quantity: " + item.get("quantity"));
             }
@@ -110,7 +110,7 @@ public class PaymentProcessingServlet extends HttpServlet {
                     session.removeAttribute("selectedProducts");
 
                     System.out.println("Payment processing complete. Forwarding to success page...");
-                    Utils.showAlert(out, "Login successful!", request, response, "controller?action=orderTracking");
+                    Utils.showAlert(out, "Payment successful! Thank you for your purchase.", request, response, "controller?action=orderTracking");
 
                 } else {
                     throw new SQLException("Order ID not generated.");
