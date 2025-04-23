@@ -131,7 +131,7 @@
         <button type="submit"
                 id="updateBtn"
                 class="confirmButton"
-                style="display:none;">
+                style="display:none; margin-top: 36px">
           Update Cart
         </button>
       </form>

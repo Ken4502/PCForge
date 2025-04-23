@@ -11,26 +11,25 @@ public class OrderDAO {
     }
 
     public List<Order> getOrdersByUserId(int userId) throws SQLException {
-    List<Order> orders = new ArrayList<>();
-    String sql = "SELECT order_id, total_price, order_status, delivery_address, timestamp, user_id "
-               + "FROM Orders WHERE user_id = ?";
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, userId);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Order order = new Order();
-            order.setOrderId(        rs.getInt("order_id"));
-            order.setTotalPrice(     rs.getBigDecimal("total_price"));
-            order.setStatus(         rs.getString("order_status"));
-            order.setDeliveryAddress(rs.getString("delivery_address"));
-            // map your timestamp column into a Date (or java.sql.Timestamp) field in Order:
-            order.setOrderDate(rs.getTimestamp("timestamp"));
-            order.setUserId(         rs.getInt("user_id"));
-            orders.add(order);
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT order_id, total_price, order_status, delivery_address, timestamp, user_id "
+                   + "FROM Orders WHERE user_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setTotalPrice(rs.getBigDecimal("total_price"));
+                order.setStatus(rs.getString("order_status"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setOrderDate(rs.getTimestamp("timestamp"));
+                order.setUserId(rs.getInt("user_id"));
+                orders.add(order);
+            }
         }
+        return orders;
     }
-    return orders;
-}
 
     // Private helper
     private List<OrderItem> getOrderItems(int orderId) throws SQLException {
@@ -56,4 +55,36 @@ public class OrderDAO {
     public List<OrderItem> getOrderItemsByOrderId(int orderId) throws SQLException {
         return getOrderItems(orderId);
     }
+    
+    
+    public List<Order> getAllOrders() throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setTotalPrice(rs.getBigDecimal("total_price"));
+                order.setStatus(rs.getString("order_status"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setOrderDate(rs.getTimestamp("timestamp"));
+                order.setUserId(rs.getInt("user_id"));
+                orders.add(order);
+            }
+        }
+    return orders;
+    }
+    
+    public void updateOrderStatus(int orderId, String newStatus) throws SQLException {
+        String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, orderId);
+            stmt.executeUpdate();
+        }
+    }
+
 }

@@ -110,7 +110,7 @@ public class PaymentProcessingServlet extends HttpServlet {
                     session.removeAttribute("selectedProducts");
 
                     System.out.println("Payment processing complete. Forwarding to success page...");
-                    Utils.showAlert(out, "Login successful!", request, response, "controller?action=orderTracking");
+                    Utils.showAlert(out, "Payment successful! Thank you for your purchase!", request, response, "controller?action=orderTracking");
 
                 } else {
                     throw new SQLException("Order ID not generated.");
