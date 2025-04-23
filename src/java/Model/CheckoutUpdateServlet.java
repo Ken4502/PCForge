@@ -26,8 +26,7 @@ public class CheckoutUpdateServlet extends HttpServlet {
                 String name = request.getParameter("name_" + idx);
                 String price = request.getParameter("price_" + idx);
                 String quantity = request.getParameter("quantity_" + idx);
-                System.out.println("Id: " + id);
-                
+
                 HashMap<String, String> item = new HashMap<>();
                 item.put("id", id);
                 item.put("name", name);
