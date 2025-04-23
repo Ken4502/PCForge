@@ -82,6 +82,12 @@ public class PageControl extends HttpServlet {
             case "orderTracking":
                 request.getRequestDispatcher("OrderTrackingController").forward(request, response);
                 break;
+            case "viewProduct":
+                request.getRequestDispatcher("WEB-INF/ProductDetailsUser.jsp").forward(request, response);
+                break;
+            case "viewOrders":
+                response.sendRedirect("OrderViewAllAdmin");
+                break;
             case "addressConfirmation":
                 List<HashMap<String, String>> selectedProductsForPayment = 
                     (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
