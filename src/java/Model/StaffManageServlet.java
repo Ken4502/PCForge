@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
+
 
 @WebServlet("/StaffManageServlet")
 public class StaffManageServlet extends HttpServlet {
@@ -40,7 +44,10 @@ public class StaffManageServlet extends HttpServlet {
                 staff.put("id", String.valueOf(rs.getInt("id")));
                 staff.put("username", rs.getString("username"));
                 staff.put("is_admin", rs.getBoolean("is_admin") ? "Admin" : "Staff"); // Convert boolean to text
-                staff.put("created_at", rs.getString("created_at"));
+                Timestamp timestamp = rs.getTimestamp("created_at");
+                LocalDateTime dateTime = timestamp.toLocalDateTime();
+                String formattedTime = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                staff.put("created_at", formattedTime);
                 staffList.add(staff);
             }
 

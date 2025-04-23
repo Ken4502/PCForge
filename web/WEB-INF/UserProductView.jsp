@@ -110,16 +110,30 @@
                             <h4><%= product.get("name") %></h4>
                             <p>Price: RM <%= product.get("price") %></p>
 
-                            <% if (loggedInUser != null) { %>
-                                <label>Quantity:</label>
-                                <input type="number" name="quantity_<%= product.get("id") %>" 
-                                       value="0" max="<%= product.get("quantity") %>" min="0" 
-                                       oninput="validateInput(this)" />
-                                <input type="hidden" name="product_id_<%= product.get("id") %>" 
-                                       value="<%= product.get("id") %>" />
-                            <% } else { %>
-                                <p>Available: <%= product.get("quantity") %></p>
-                            <% } %>
+        <% 
+            int availableQty = Integer.parseInt(product.get("quantity")); 
+            if (loggedInUser != null) {
+                if (availableQty > 0) {
+        %>
+                    <label>Quantity:</label>
+                    <input type="number" name="quantity_<%= product.get("id") %>" 
+                           value="0" max="<%= availableQty %>" min="0" 
+                           oninput="validateInput(this)" />
+                    <input type="hidden" name="product_id_<%= product.get("id") %>" 
+                           value="<%= product.get("id") %>" />
+        <%
+                } else {
+        %>
+                    <button type="button" class="submitButton disabledButton" disabled>Order Closed</button>
+        <%
+                }
+            } else {
+        %>
+            <p>Available: <%= availableQty %></p>
+        <%
+            }
+        %>
+
                         </div>
                     <% } %>
                 </div>

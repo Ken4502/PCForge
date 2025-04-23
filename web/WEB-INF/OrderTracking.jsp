@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:include page="../Header.jsp"/>
-<%@ page import="java.util.*, Model.Order, Model.OrderItem" %>
+<%@ page import="java.util.*, Model.Order, Model.OrderItem, java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,6 +104,9 @@
     </style>
 </head>
 <body class="body">
+    <%
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    %>
     <div class="orders-wrapper">
     <h2>Your Orders</h2>
 
@@ -123,7 +126,7 @@
             <div class="order-card">
                 <p><strong>Order ID:</strong> <%= orderId %></p>
                 <p><strong>Status:</strong> <%= order.getStatus() %></p>
-                <p><strong>Order Date:</strong> <%= order.getOrderDate() %></p>
+                <p><strong>Order Date:</strong> <%= sdf.format(order.getOrderDate()) %></p>
                 <p><strong>Delivery Address:</strong> <%= order.getDeliveryAddress() %></p>
 
                 <%
@@ -155,8 +158,7 @@
                                 }
                             %>
                             <tr>
-                                <td colspan="2"></td>
-                                <th>Grand Total:</th>
+                                <th colspan="3">Grand Total:</th>
                                 <th>RM <%= order.getTotalPrice() %></th>
                             </tr>
                         </tbody>
@@ -174,6 +176,8 @@
             }
         %>
     </div>
+        <button type="button" onclick="location.href='controller?';">Back</button>
+
     </div>
 </body>
 </html>

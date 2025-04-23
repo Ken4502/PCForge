@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="BodyStyle.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Add Product</title>
 </head>
 <body class="body">
     <h2>Add Product</h2>
