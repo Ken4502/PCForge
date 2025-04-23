@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="Model.Order" %>
+<%@ page import="Model.Order, java.text.SimpleDateFormat" %>
 <jsp:include page="../Header.jsp"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +42,9 @@
   </style>
 </head>
 <body class="body">
+    <%
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    %>
   <h2>All Orders</h2>
 
   <div id="searchControls">
@@ -82,18 +85,18 @@
       <tr>
         <td><%= order.getOrderId() %></td>
         <td><%= order.getUserId() %></td>
-        <td><%= order.getOrderDate() %></td>
+        <td><%= sdf.format(order.getOrderDate()) %></td>
         <td>RM<%= order.getTotalPrice() %></td>
-        <td><%= order.getDeliveryAddress() %></td>
         <td><%= order.getStatus() %></td>
+        <td><%= order.getDeliveryAddress() %></td>
         <td>
           <form method="post" action="UpdateOrderStatusServlet" onsubmit="return confirmStatusChange(this);">
             <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
             <select name="newStatus" required>
               <option value="">--</option>
-              <option value="packaging" <%= "packaging".equals(order.getStatus()) ? "selected" : "" %>>Packaging</option>
-              <option value="shipping"  <%= "shipping".equals(order.getStatus())  ? "selected" : "" %>>Shipping</option>
-              <option value="delivery"  <%= "delivery".equals(order.getStatus())  ? "selected" : "" %>>Delivery</option>
+              <option value="Packaging" <%= "Packaging".equals(order.getStatus()) ? "selected" : "" %>>Packaging</option>
+              <option value="Shipping"  <%= "Shipping".equals(order.getStatus())  ? "selected" : "" %>>Shipping</option>
+              <option value="Delivery"  <%= "Delivery".equals(order.getStatus())  ? "selected" : "" %>>Delivery</option>
             </select>
             <button type="submit">Update</button>
           </form>
