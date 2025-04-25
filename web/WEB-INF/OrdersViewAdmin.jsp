@@ -7,7 +7,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="BodyStyle.css">
   <meta charset="UTF-8">
-  <title>Product Details</title>
+  <title>Order Details</title>
   <style>
     #searchControls {
       margin-bottom: 1em;

@@ -208,7 +208,7 @@
             <input type="text" name="expiryDate" id="expiryDate" maxlength="5" placeholder="MM/YY"><br>
 
             <label>CVV:</label>
-            <input type="text" name="vcc" id="vcc" maxlength="3" placeholder="123"><br>
+            <input type="text" name="ccv" id="ccv" maxlength="3" placeholder="123"><br>
         </div>
 
         <input type="hidden" name="grandTotal" value="<%= df.format(finalTotal) %>">
@@ -218,29 +218,6 @@
 </div>
 </div>
 
-<script>
-    const cardNumberInput = document.getElementById('cardNumber');
-    cardNumberInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '').substring(0, 16); // Only digits, max 16
-        value = value.replace(/(.{4})/g, '$1-').trim(); // Add dashes
-        if (value.endsWith('-')) value = value.slice(0, -1);
-        e.target.value = value;
-    });
-
-    const expiryInput = document.getElementById('expiryDate');
-    expiryInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '').substring(0, 4); // Only digits, max 4
-        if (value.length >= 3) {
-            value = value.substring(0, 2) + '/' + value.substring(2);
-        }
-        e.target.value = value;
-    });
-
-    const vccInput = document.getElementById('vcc');
-    vccInput.addEventListener('input', function (e) {
-        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3); // Only 3 digits
-    });
-</script>
-
+<script src="cardValidation.js"></script>
 </body>
 </html>

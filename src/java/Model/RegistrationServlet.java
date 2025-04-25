@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Util.Utils; // Import Utils class
+import Util.registrationValidator;
 
 @WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
@@ -40,31 +41,27 @@ public class RegistrationServlet extends HttpServlet {
             String repass = request.getParameter("repass");
             String address = request.getParameter("address");
             
-            //NOTICE: ADD REGEXX for username, email and password
-            String usernameRegex = "^(?=.*[A-Z])[A-Za-z0-9 ]{4,}$"; //Least 4 characters; an Uppercase letter
-            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"; //(sample@email.com)           
-            String passwordRegex ="^(?=.*[A-Za-z])(?=.*\\d).{8,}$"; //Least 8 character; one letter and one number
             
             request.getSession().setAttribute("name", name);
             request.getSession().setAttribute("email", email);
             request.getSession().setAttribute("address", address);
             
             //Check if username format is valid ; NOTICE
-                if (!name.matches(usernameRegex)) { 
+                if (!registrationValidator.isValidUsername(name)) { 
                     Utils.showAlert(out, "Invalid username format! Username must have at least 4 characters and an Uppercase letter ",
                             request, response, "controller?action=register");
                     return;
                 }           
 
             //Check if email format is valid ; NOTICE
-                if (!email.matches(emailRegex)) { 
+                if (!registrationValidator.isValidEmail(email)) { 
                     Utils.showAlert(out, "Invalid email format! Please use a correct format (e.g., PCforge123@sample.com).",
                             request, response, "controller?action=register");
                     return;
                 }  
                 
             //Check if password format is valid ; NOTICE
-                if (!password.matches(passwordRegex)) { 
+                if (!registrationValidator.isValidPassword(password)) { 
                     Utils.showAlert(out, "Invalid password format! Password must have at least 8 characters,"
                             + " one alphabetic letter and one numeric letter.",
                             request, response, "controller?action=register");
@@ -73,7 +70,7 @@ public class RegistrationServlet extends HttpServlet {
 
 
             //Check if password match confirmation
-                if (!repass.equals(password)) {
+                if (!registrationValidator.passwordsMatch(password, repass)) {
                     Utils.showAlert(out, "Passwords do not match!", request, response, "controller?action=register");
                     return;
                 }
