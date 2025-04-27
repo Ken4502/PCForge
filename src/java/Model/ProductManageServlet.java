@@ -1,6 +1,5 @@
 package Model;
 
-
 import Util.DatabaseConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 @WebServlet("/ProductManageServlet")
 public class ProductManageServlet extends HttpServlet {
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -37,6 +36,11 @@ public class ProductManageServlet extends HttpServlet {
         String sortBy = request.getParameter("sortBy");
         String sortOrder = request.getParameter("sortOrder");
 
+        //Retrieve search value from search text field
+        String search = request.getParameter("search");
+        String ctgr = request.getParameter("category");
+
+
         // Default sorting if no parameters are provided
         if (sortBy == null || sortBy.isEmpty()) {
             sortBy = "id"; // Default sort by id
@@ -51,17 +55,40 @@ public class ProductManageServlet extends HttpServlet {
         }
 
         // Prepare the SQL query with dynamic sorting
-        String sql = "SELECT p.id, p.product_name, p.price, p.quantity, p.image_url, c.category_name "
-                   + "FROM products p "
-                   + "JOIN category c ON p.category_id = c.id "
-                   + "ORDER BY " + sortBy + " " + sortOrder;
+        String sql;
+        if ((search == null || search.isEmpty()) && (ctgr == null || ctgr.isEmpty())) {
+            sql = "SELECT p.id, p.product_name, p.price, p.quantity, p.image_url, c.category_name "
+                    + "FROM products p "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "ORDER BY " + sortBy + " " + sortOrder;
+        }
+        else if(search == null || search.isEmpty()){
+            sql = "SELECT p.id, p.product_name, p.price, p.quantity, p.image_url, c.category_name "
+                    + "FROM products p "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "WHERE c.id = " + ctgr + " "
+                    + "ORDER BY " + sortBy + " " + sortOrder;
+        }
+        else if(ctgr == null || ctgr.isEmpty()){
+            sql = "SELECT p.id, p.product_name, p.price, p.quantity, p.image_url, c.category_name "
+                    + "FROM products p "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "WHERE LOWER(p.product_name) LIKE LOWER('%"+search+"%') "
+                    + "ORDER BY " + sortBy + " " + sortOrder;
+        }
+        else {
+            sql = "SELECT p.id, p.product_name, p.price, p.quantity, p.image_url, c.category_name "
+                    + "FROM products p "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "WHERE LOWER(p.product_name) LIKE LOWER('%"+search+"%') "
+                    + "AND c.id = " + ctgr + " "
+                    + "ORDER BY " + sortBy + " " + sortOrder;
+        }
 
         List<Map<String, String>> products = new ArrayList<>();
 
         // Execute the query and retrieve the products
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Map<String, String> product = new HashMap<>();
@@ -77,11 +104,29 @@ public class ProductManageServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        //Retrieving all category name for select option
+        String categorySQL = "SELECT * FROM category";
+        List<HashMap<String, String>> categoryList = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(categorySQL); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                HashMap<String, String> category = new HashMap<>();
+                category.put("category_ID", String.valueOf(rs.getInt("id")));
+                category.put("category_NAME", rs.getString("category_name"));
+                categoryList.add(category); // Add the map to the list
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Set the sorting parameters to the request, so they can be used in the JSP
         // Store the product list in request scope and forward it to JSP
         request.setAttribute("sortBy", sortBy);
         request.setAttribute("sortOrder", sortOrder);
         request.setAttribute("products", products);
+        request.setAttribute("categoryList", categoryList);
         request.getRequestDispatcher("WEB-INF/ProductManage.jsp").forward(request, response);
     }
 }

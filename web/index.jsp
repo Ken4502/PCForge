@@ -41,6 +41,7 @@
         <a href="controller?action=viewOrders">Manage Order Status</a>
         <a href="controller?action=staffaccountmanage">Manage Account</a>
         <a href="controller?action=productmanage">Manage Product</a>
+        <a href="controller?action=report">Report</a>
         <a href="AdminLogoutServlet" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
     <%
     } else if (loggedInUser != null) { 

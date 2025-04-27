@@ -82,6 +82,9 @@ public class PageControl extends HttpServlet {
             case "orderTracking":
                 request.getRequestDispatcher("OrderTrackingController").forward(request, response);
                 break;
+            case "report":
+                request.getRequestDispatcher("/ReportServlet").forward(request, response);
+                break;
             case "viewProduct":
                 request.getRequestDispatcher("WEB-INF/ProductDetailsUser.jsp").forward(request, response);
                 break;
