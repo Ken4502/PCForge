@@ -18,12 +18,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="BodyStyle.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
         <title>Report</title>
     </head>
     <style>
-        * {
+        * {           
             font-family: sans-serif;
             color: black;
         }
@@ -76,66 +77,89 @@
             background-color:lightgreen;
             color:black;
         }
+        body {
+            background-color: #ffcccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
     <body>
-        <h1>Report</h1>
-        <!--<a href="">Top Sales Report</a>
-        <a href="">Potential Customer</a>-->
-        <form action="ReportServlet" method="GET">
-            From
-            <input type="date" name="from" id="from" value="<%=from != null ? from : ""%>">
-            to
-            <input type="date" name="to" id="to" value="<%=to != null ? to : ""%>">
-            <button type="submit" onclick="return validationDate()">Apply</button>
-        </form>
-        <div class="chart-container">
-            <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
+        <div class="container">
+            <div class="form-container">        
+                <h1>Report</h1>
+                <!--<a href="">Top Sales Report</a>
+                <a href="">Potential Customer</a>-->
+                <form action="ReportServlet" method="GET">
+                    From
+                    <input type="date" name="from" id="from" value="<%=from != null ? from : ""%>">
+                    to
+                    <input type="date" name="to" id="to" value="<%=to != null ? to : ""%>">
+                    <button type="submit" onclick="return validationDate()">Apply</button>
+                </form>
+                <div class="chart-container">
+                    <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
 
-            <div class="sales-list">
-                <%if (barChart != null && !barChart.isEmpty()) {%><!--if have record found within the date-->
-                <h3>Sales by Category</h3>
+                    <div class="sales-list">
+                        <%if (barChart != null && !barChart.isEmpty()) {%><!--if have record found within the date-->
+                        <h3>Sales by Category</h3>
+                        <table style="font-size:20px;">
+                            <%if (barChart != null) {%>
+                            <% for (int i = 0; i < barChart.size(); i++) {
+                                    HashMap<String, String> item = barChart.get(i);%>
+                            <tr>
+                                <td><%=i + 1%>. <%= item.get("category")%></td>
+                                <th>RM</th>
+                                <th style="text-align:right;"> <%= item.get("totalSales")%></th>
+                            </tr>
+                            <% }%>
+                            <% }%>
+                        </table>
+                        <% } else if (barChart != null && barChart.isEmpty()) { %>
+                        <% if (from == null && to == null) { %>
+                        <h3 style="color:red;">ERROR</h3>
+                        <p id="error">No data available.</p>
+                        <% } else if (from != null && to != null && from.equals(to)) {%>
+                        <h3 style="color:red;">ERROR</h3>
+                        <p id="error">No data at <strong><%=from%></strong></p>
+                        <% } else if (from == null && to != null) {%>
+                        <h3 style="color:red;">ERROR</h3>
+                        <p id="error">No data found before <strong><%=to%></strong></p>
+                        <% } else if (to == null && from != null) {%>
+                        <h3 style="color:red;">ERROR</h3>
+                        <p id="error">No data found after <strong><%=from%></strong></p>
+                        <% } else {%>
+                        <h3 style="color:red;">ERROR</h3>
+                        <p id="error">No data from <strong><%=from%></strong> until <strong><%=to%></strong></p>
+                        <% } %>
+                        <% }%>
+                    </div>
+                </div>
                 <table style="font-size:20px;">
-                    <%if (barChart != null) {%>
-                    <% for (int i = 0; i < barChart.size(); i++) {
-                            HashMap<String, String> item = barChart.get(i);%>
                     <tr>
-                        <td><%=i + 1%>. <%= item.get("category")%></td>
-                        <th>RM</th>
-                        <th style="text-align:right;"> <%= item.get("totalSales")%></th>
+                        <th>Total categories</th>
+                        <td>: <%= (barChart != null ? barChart.size() : 0)%></td>
                     </tr>
-                    <% }%>
-                    <% }%>
+                    <tr>
+                        <th>Total sales </th>
+                        <td>: RM<%= totalsales%></td>
+                    </tr>
                 </table>
-                <% } else if (barChart != null && barChart.isEmpty()) { %>
-                <% if (from == null && to == null) { %>
-                <h3 style="color:red;">ERROR</h3>
-                <p id="error">No data available.</p>
-                <% } else if (from != null && to != null && from.equals(to)) {%>
-                <h3 style="color:red;">ERROR</h3>
-                <p id="error">No data at <strong><%=from%></strong></p>
-                <% } else if (from == null && to != null) {%>
-                <h3 style="color:red;">ERROR</h3>
-                <p id="error">No data found before <strong><%=to%></strong></p>
-                <% } else if (to == null && from != null) {%>
-                <h3 style="color:red;">ERROR</h3>
-                <p id="error">No data found after <strong><%=from%></strong></p>
-                <% } else {%>
-                <h3 style="color:red;">ERROR</h3>
-                <p id="error">No data from <strong><%=from%></strong> until <strong><%=to%></strong></p>
-                <% } %>
-                <% }%>
             </div>
-        </div>
-        <table style="font-size:20px;">
-            <tr>
-                <th>Total categories</th>
-                <td>: <%= (barChart != null ? barChart.size() : 0)%></td>
-            </tr>
-            <tr>
-                <th>Total sales </th>
-                <td>: RM<%= totalsales%></td>
-            </tr>
-        </table>
+        </div>            
     </body>
 
     <script>

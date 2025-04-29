@@ -101,6 +101,22 @@
             margin-top: 10px;
             color: #333;
         }
+        
+        .btn {
+            width: auto;
+            padding: 10px;
+            background-color: #ff9999;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e47575;
+        }
     </style>
 </head>
 <body class="body">
@@ -176,7 +192,7 @@
             }
         %>
     </div>
-        <button type="button" onclick="location.href='controller?';">Back</button>
+        <button type="button"  class="btn" onclick="location.href='controller?';">Back</button>
 
     </div>
 </body>

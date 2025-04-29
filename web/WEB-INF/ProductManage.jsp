@@ -47,105 +47,213 @@
             .desc:before {
                 content: "↓";
             }
+            body {
+                font-size: 15px;
+                display: flex;
+                align-items: top;
+                justify-content: center;
+            }
+            h2 {
+                font-size: 30px;
+                text-align: left;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            h3 {
+                font-size: 25px;
+                text-align: left;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .container {
+                width: 100%;           
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+            }
+            .form-container {
+                background-color: #ffe8e8;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .btn {
+                width: auto;
+                padding: 10px;
+                background-color: #ff9999;
+                color: black;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background-color 0.3s;
+            }
+            .btn:hover {
+                background-color: #e47575;
+            }           
+            input[type="text"] {
+                width: auto;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+            input[type="submit"] {
+                width: auto;
+                padding: 10px;
+                background-color: #ff9999;
+                color: black;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background-color 0.3s;
+            }
+            input[type="submit"]:hover{
+               background-color: #e47575; 
+            }  
+            select[name="category"]{
+                width: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 15px;
+            }
+            .links {
+                font-size: 18px;
+                margin: 5px;
+                text-align: left;
+            }
+            .links a {   
+                width: auto;
+                padding: 10px;
+                background-color: #ff9999;
+                color: black;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+            }
+            .links a:hover {
+                background-color: #e47575;
+            }
+            th{
+                font-size: 18px;
+            }
         </style>
     </head>
     <body class="body">
-        <%        String message = (String) session.getAttribute("message");
-            String messageType = (String) session.getAttribute("messageType");
-            if (message != null) {
-        %>
-        <div class="<%= messageType%>">
-            <%= message%>
-        </div>
-        <%
-                session.removeAttribute("message"); // Remove message after displaying
-                session.removeAttribute("messageType");
-            }
-        %>
+        <div class="container">
+            <div class="form-container"> 
         
-        <h2>Product Management</h2>
-        <form action="ProductManageServlet" method="GET">
-            <input type="text" name="search" placeholder="Enter product name">
-            <input type="submit" value="Search"><br>
-            <%
-                if (categoryList != null) {
-            %>
-            <select name="category">
-                <option value="">All</option>
-                <% for (Map<String, String> ctgr : categoryList) {%>
-                <option value="<%= ctgr.get("category_ID")%>">
-                    <%= ctgr.get("category_NAME")%>
-                </option>
-                <% } %>
-            </select>
-            <%
-            } else {
-            %>
-            <p>No categories available.</p>
-            <%
-                }
-            %>
-                    </form>
-        <a href="controller?action=productadd">Add Product</a>
-        <button type="button" onclick="location.href = 'controller?';">Back</button>
-        <h3>Product List</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID
-                        <a href="ProductManageServlet?sortBy=id&sortOrder=<%= "id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
-                            <span class="sort-arrow <%= "id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
-                        </a>
-                    </th>
-                    <th>Product Name
-                        <a href="ProductManageServlet?sortBy=product_name&sortOrder=<%= "product_name".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
-                            <span class="sort-arrow <%= "product_name".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
-                        </a>
-                    </th>
-                    <th>Price
-                        <a href="ProductManageServlet?sortBy=price&sortOrder=<%= "price".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
-                            <span class="sort-arrow <%= "price".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
-                        </a>
-                    </th>
-                    <th>Quantity
-                        <a href="ProductManageServlet?sortBy=quantity&sortOrder=<%= "quantity".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
-                            <span class="sort-arrow <%= "quantity".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
-                        </a>
-                    </th>
-                    <th>Category
-                        <a href="ProductManageServlet?sortBy=category_id&sortOrder=<%= "category_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
-                            <span class="sort-arrow <%= "category_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
-                        </a>
-                    </th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (products != null && !products.isEmpty()) { %>
-                <% for (Map<String, String> product : products) {%>
-                <tr>
-                    <td><%= product.get("id")%></td>
-                    <td><%= product.get("name")%></td>
-                    <td>RM<%= String.format("%.2f", Double.parseDouble(product.get("price")))%></td>
-                    <td><%= product.get("quantity")%></td>
-                    <td><%= product.get("category")%></td>
-                    <td><img src="<%= product.get("image")%>" class="img" alt="Product Image"></td>
-                    <td>
-                        <a href="controller?action=productEdit&id=<%= product.get("id")%>">Edit</a>
-                        <% if (isAdmin) {%>|
-                        <a href="controller?action=productDelete&id=<%= product.get("id")%>" 
-                           onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                <%        String message = (String) session.getAttribute("message");
+                    String messageType = (String) session.getAttribute("messageType");
+                    if (message != null) {
+                %>
+                <div class="<%= messageType%>">
+                    <%= message%>
+                </div>
+                <%
+                        session.removeAttribute("message"); // Remove message after displaying
+                        session.removeAttribute("messageType");
+                    }
+                %>
+
+                <h2>Product Management</h2>
+                <form action="ProductManageServlet" method="GET">
+                    <div class="form-group">
+                    <input type="text" name="search" placeholder="Enter product name">&nbsp&nbsp&nbsp
+                    <input type="submit" value="Search"></div>
+                    <%
+                        if (categoryList != null) {
+                    %>
+                    <select name="category">
+                        <option value="">All</option>
+                        <% for (Map<String, String> ctgr : categoryList) {%>
+                        <option value="<%= ctgr.get("category_ID")%>">
+                            <%= ctgr.get("category_NAME")%>
+                        </option>
                         <% } %>
-                    </td>
-                </tr>
-                <% } %>
-                <% } else { %>
-                <tr>
-                    <td colspan="7">No products found.</td>
-                </tr>
-                <% }%>
-            </tbody>
-        </table>
+                    </select>
+                    <%
+                    } else {
+                    %>
+                    <p>No categories available.</p>
+                    <%
+                        }
+                    %>
+                            </form>
+                <div class="links">            
+                <a href="controller?action=productadd">Add Product</a>&nbsp
+                <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
+                </div>
+                <h3>Product List</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID
+                                <a href="ProductManageServlet?sortBy=id&sortOrder=<%= "id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                            </th>
+                            <th>Product Name
+                                <a href="ProductManageServlet?sortBy=product_name&sortOrder=<%= "product_name".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "product_name".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                            </th>
+                            <th>Price
+                                <a href="ProductManageServlet?sortBy=price&sortOrder=<%= "price".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "price".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                            </th>
+                            <th>Quantity
+                                <a href="ProductManageServlet?sortBy=quantity&sortOrder=<%= "quantity".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "quantity".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                            </th>
+                            <th>Category
+                                <a href="ProductManageServlet?sortBy=category_id&sortOrder=<%= "category_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "category_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                            </th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (products != null && !products.isEmpty()) { %>
+                        <% for (Map<String, String> product : products) {%>
+                        <tr>
+                            <td><%= product.get("id")%></td>
+                            <td><%= product.get("name")%></td>
+                            <td>RM<%= String.format("%.2f", Double.parseDouble(product.get("price")))%></td>
+                            <td><%= product.get("quantity")%></td>
+                            <td><%= product.get("category")%></td>
+                            <td><img src="<%= product.get("image")%>" class="img" alt="Product Image"></td>
+                            <td>
+                                <div class="links">
+                                <a href="controller?action=productEdit&id=<%= product.get("id")%>">Edit</a>
+                                <% if (isAdmin) {%>&nbsp
+                                <a href="controller?action=productDelete&id=<%= product.get("id")%>" 
+                                   onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                                <% } %>
+                                </div>
+                            </td>
+                        </tr>
+                        <% } %>
+                        <% } else { %>
+                        <tr>
+                            <td colspan="7">No products found.</td>
+                        </tr>
+                        <% }%>
+                    </tbody>
+                </table>
+            </div>        
+        </div>        
+                    
     </body>
 </html>

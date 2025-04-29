@@ -82,12 +82,21 @@
       width: 100%;
       text-align: center;
     }
+    input[type="text"]{
+        width: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 15px;
+    }
   </style>
 </head>
 <body class="body">
 
   <div id="searchControls">
-    <label for="searchBy">Search by:</label>
+    <label for="searchBy" style="font-size:18px">Search by:</label>
     <select id="searchBy">
       <option value="all">All</option>
       <option value="name">Name</option>
@@ -101,7 +110,7 @@
     />
   </div>
 
-  <h2>Available Products</h2>
+  <h2 style="font-size:30px">Available Products</h2>
 
   <%
     List<HashMap<String,String>> categoryList =
@@ -120,7 +129,7 @@
         if (prods == null || prods.isEmpty()) continue;
     %>
       <div class="category-block">
-        <h3 class="category-name"><%= catName %></h3>
+        <h3 class="category-name" style="font-size:22px"><%= catName %></h3>
         <div class="product-container">
           <%
             for (HashMap<String,String> product : prods) {
