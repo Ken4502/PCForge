@@ -1,6 +1,8 @@
 package Model;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable{
     private int id;
     private String productName;
     private double price;
@@ -23,4 +25,11 @@ public class Product {
     public int getQuantity() { return quantity; }
     public String getImageUrl() { return imageUrl; }
     public String getCategoryName() { return categoryName; }
+    
+    public void setId() { this.id = id; }
+    public void setProductName() { this.productName = productName; }
+    public void setPrice() { this.price = price; }
+    public void setQuantity() { this.quantity = quantity; }
+    public void setImageUrl() { this.imageUrl = imageUrl; }
+    public void setCategoryName() { this.categoryName = categoryName; }
 }

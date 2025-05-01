@@ -43,6 +43,9 @@ public class PageControl extends HttpServlet {
             case "home":
                 request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
+            case "error":
+                request.getRequestDispatcher("WEB-INF/Error.jsp").forward(request, response);
+                break;
             case "register":
                 request.getRequestDispatcher("/WEB-INF/UserRegistration.jsp").forward(request, response);
                 break;
@@ -57,6 +60,12 @@ public class PageControl extends HttpServlet {
                 break;
             case "staffmanage":
                 response.sendRedirect("StaffManageServlet");
+                break;    
+            case "userprofile":
+                request.getRequestDispatcher("WEB-INF/UserProfile.jsp").forward(request, response);
+                break;    
+            case "usermanage":
+                response.sendRedirect("UserManageServlet");
                 break;    
             case "productmanage":
                 response.sendRedirect("ProductManageServlet");
@@ -86,7 +95,7 @@ public class PageControl extends HttpServlet {
                 request.getRequestDispatcher("/ReportServlet").forward(request, response);
                 break;
             case "viewProduct":
-                request.getRequestDispatcher("WEB-INF/ProductDetailsUser.jsp").forward(request, response);
+                request.getRequestDispatcher("WEB-INF/UserProductDetails.jsp").forward(request, response);
                 break;
             case "viewOrders":
                 response.sendRedirect("OrderViewAllAdmin");

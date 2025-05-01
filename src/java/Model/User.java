@@ -1,10 +1,13 @@
 package Model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
     private int id;
     private String name;
     private String email;
     private String address;
+    private String userLoginName;
 
     // Constructors
     public User() {}
@@ -47,5 +50,13 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+    
+    public String getUserLoginName(){
+        return userLoginName;
+    }
+    
+    public void setUserLoginName(String userLoginName){
+        this.userLoginName = userLoginName;
     }
 }
