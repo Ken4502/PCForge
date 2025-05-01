@@ -12,38 +12,52 @@
         <title>User Manage</title>
 
         <link rel="stylesheet" type="text/css" href="ErrorMessage.css">
+        <link rel="stylesheet" type="text/css" href="BodyStyle.css">
     </head>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f7fa;
-            margin: 0;
-            padding: 0;
+            font-size: 15px;
+            display: flex;
+            align-items: top;
+            justify-content: center;
+            background-color: #ffcccc;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            align-items: flex-start; /* Align content to the left */
-            padding-left: 20px; /* Add some left padding for better spacing */
+        }
+
+        .form-container {
+            background-color: #ffe8e8;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            margin-top: 40px;
+            font-size: 30px;
             color: #333;
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         table {
-            width: 80%;
-            margin: 20px 0;
+            width: 100%;
+            margin-top: 20px;
             border-collapse: collapse;
             background-color: #fff;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             border: 1px solid #ddd;
-            font-size: 14px;
+            font-size: 15px;
             color: #333;
         }
 
@@ -59,90 +73,69 @@
             background-color: #f1f1f1;
         }
 
-        #userForm {
-            display: none;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-            align-items:center;
-            width: 100%;
-            margin-top: 20px;
-        }
-
         input[type="text"],
         input[type="password"],
-        textarea{
-            width: 100%;
+        textarea {
+            width: auto;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
+            font-size: 15px;
         }
 
-        textarea{
+        textarea {
             text-align: left;
+            width: 100%;
         }
 
         input[type="submit"],
-        input[type="reset"] {
-            width: 150px;
-            padding: 10px;
-            margin: 10px 10px 10px 0;
+        input[type="reset"],
+        button {
+            padding: 10px 20px;
+            background-color: #ff9999;
+            color: black;
             border: none;
             border-radius: 4px;
-            font-size: 14px;
-            background-color: #4CAF50;
-            color: white;
             cursor: pointer;
+            font-size: 15px;
             transition: background-color 0.3s ease;
         }
 
         input[type="submit"]:hover,
-        input[type="reset"]:hover {
-            background-color: #45a049;
-        }
-
-        button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
+        input[type="reset"]:hover,
         button:hover {
-            background-color: #e53935;
-        }
-
-        .form-container {
-            text-align: center;
+            background-color: #e47575;
         }
 
         .toggle-button {
-            background-color: #007bff;
-            color: white;
+            margin-bottom: 20px;
+            background-color: #ff9999;
+            color: black;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 15px;
             transition: background-color 0.3s ease;
-
         }
 
         .toggle-button:hover {
-            background-color: #0056b3;
+            background-color: #e47575;
+        }
+
+        #userForm {
+            display: none;
+            margin-top: 20px;
         }
     </style>
     <body>
+        <div class="container">
+        <div class="form-container">
         <h1>User Manage</h1>
         <button class="toggle-button" onclick="toggleForm()">Add a user</button>
 
-        <div class="form-container">
+        
             <form action="UserManageServlet" method="get" id="userForm" onsubmit="return validateForm();">
                 <input type="text" name="name" placeholder="Username" required><br>
                 <span class="error-message" id="usernameError"></span>
@@ -156,7 +149,7 @@
                 <input type="submit" value="Submit">
                 <input type="reset" value="Reset">
             </form>
-        </div>
+        
 
         <table>
             <tr>
@@ -199,7 +192,8 @@
             </tr>
             <% }%>
         </table>
-
+        </div>
+        </div>
         <script>
             function toggleForm() {
                 var form = document.getElementById("userForm");

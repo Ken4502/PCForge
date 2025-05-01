@@ -13,14 +13,14 @@
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color: #f9d7d7;
+                background-color: #ffcccc;
                 font-size: 18px;
             }
 
             .container {
                 width: 80%;
                 margin: 40px auto;
-                background-color: #f8ecec;
+                background-color: #ffe8e8;
                 border-radius: 8px;
                 padding: 20px;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.1);
