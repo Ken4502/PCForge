@@ -42,5 +42,14 @@ public class Utils {
         out.println("</script>");
         out.flush();
     }
-}
 
+    // Method to show alert and redirect
+    public static void remainPage(PrintWriter out, String message, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        out.println("<script type='text/javascript'>");
+        out.println("alert('" + message + "');");
+        out.println("window.history.back();");
+        out.println("</script>");
+        out.flush();
+    }
+
+}

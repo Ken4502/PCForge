@@ -152,10 +152,10 @@
                     <table class="order-table">
                         <thead>
                             <tr>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Price (RM)</th>
-                                <th>Subtotal (RM)</th>
+                                <th style="background-color: #ffe8e8;">Product Name</th>
+                                <th style="background-color: #ffe8e8;">Quantity</th>
+                                <th style="background-color: #ffe8e8;">Price (RM)</th>
+                                <th style="background-color: #ffe8e8;">Subtotal (RM)</th>
                             </tr>
                         </thead>
                         <tbody>

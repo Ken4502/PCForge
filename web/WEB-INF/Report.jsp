@@ -100,7 +100,7 @@
     <body>
         <div class="container">
             <div class="form-container">        
-                <h1>Report</h1>
+                <h1>Top Sales Report</h1>
                 <!--<a href="">Top Sales Report</a>
                 <a href="">Potential Customer</a>-->
                 <form action="ReportServlet" method="GET">

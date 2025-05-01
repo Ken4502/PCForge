@@ -12,12 +12,15 @@
     </head>
     <body>
         <h1>Error Occur !</h1>
+        
+        <!--
         <%if (error != null) {%>
         <%for (HashMap<String, String> err : error) {%>
         <p><%=err.get("message")%></p><br>
         <%}%>
         <%} else {%>
         <p>No error message found</p>
-        <%}%>
+        <%}%>-->
+        
     </body>
 </html>

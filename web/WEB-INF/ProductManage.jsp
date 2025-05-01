@@ -2,7 +2,7 @@
 <%@ page import="java.util.*, java.sql.*" %>
 <%@ page import="java.util.List" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*"%>
 <%
     // Retrieve the product list from request attribute
     List<Map<String, String>> products = (List<Map<String, String>>) request.getAttribute("products");
@@ -66,12 +66,13 @@
                 color: #333;
             }
             .container {
-                width: 100%;           
+                width: 100%;
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
             }
             .form-container {
+                position:relative;
                 background-color: #ffe8e8;
                 padding: 30px;
                 border-radius: 8px;
@@ -90,7 +91,7 @@
             }
             .btn:hover {
                 background-color: #e47575;
-            }           
+            }
             input[type="text"] {
                 width: auto;
                 padding: 10px;
@@ -110,8 +111,8 @@
                 transition: background-color 0.3s;
             }
             input[type="submit"]:hover{
-               background-color: #e47575; 
-            }  
+                background-color: #e47575;
+            }
             select[name="category"]{
                 width: auto;
                 margin-top: 10px;
@@ -126,7 +127,7 @@
                 margin: 5px;
                 text-align: left;
             }
-            .links a {   
+            .links a {
                 width: auto;
                 padding: 10px;
                 background-color: #ff9999;
@@ -144,12 +145,21 @@
             th{
                 font-size: 18px;
             }
+            .form-group {
+                position: absolute;
+                top: 150px;
+                right: 30px; /* Pushes it to the right inside .form-container */
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: center;
+            }
         </style>
     </head>
     <body class="body">
         <div class="container">
             <div class="form-container"> 
-        
+
                 <%        String message = (String) session.getAttribute("message");
                     String messageType = (String) session.getAttribute("messageType");
                     if (message != null) {
@@ -164,32 +174,35 @@
                 %>
 
                 <h2>Product Management</h2>
-                <form action="ProductManageServlet" method="GET">
-                    <div class="form-group">
-                    <input type="text" name="search" placeholder="Enter product name">&nbsp&nbsp&nbsp
-                    <input type="submit" value="Search"></div>
-                    <%
-                        if (categoryList != null) {
-                    %>
-                    <select name="category">
-                        <option value="">All</option>
-                        <% for (Map<String, String> ctgr : categoryList) {%>
-                        <option value="<%= ctgr.get("category_ID")%>">
-                            <%= ctgr.get("category_NAME")%>
-                        </option>
-                        <% } %>
-                    </select>
-                    <%
-                    } else {
-                    %>
-                    <p>No categories available.</p>
-                    <%
-                        }
-                    %>
-                            </form>
                 <div class="links">            
-                <a href="controller?action=productadd">Add Product</a>&nbsp
-                <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
+                    <a href="controller?action=productadd">Add Product</a>&nbsp
+                    <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
+                    <form action="ProductManageServlet" method="GET">
+                        <div class="form-group">
+                            <input type="text" name="search" placeholder="Enter product name">&nbsp&nbsp&nbsp
+                            <%
+                                if (categoryList != null) {
+                            %>
+                            <select name="category">
+                                <option value="">All</option>
+                                <% for (Map<String, String> ctgr : categoryList) {%>
+                                <option value="<%= ctgr.get("category_ID")%>">
+                                    <%= ctgr.get("category_NAME")%>
+                                </option>
+                                <% } %>
+                            </select>
+                            <%
+                            } else {
+                            %>
+                            <p>No categories available.</p>
+                            <%
+                                }
+                            %>
+                            <input type="submit" value="Search">
+
+                        </div>
+
+                    </form>
                 </div>
                 <h3>Product List</h3>
                 <table>
@@ -236,11 +249,11 @@
                             <td><img src="<%= product.get("image")%>" class="img" alt="Product Image"></td>
                             <td>
                                 <div class="links">
-                                <a href="controller?action=productEdit&id=<%= product.get("id")%>">Edit</a>
-                                <% if (isAdmin) {%>&nbsp
-                                <a href="controller?action=productDelete&id=<%= product.get("id")%>" 
-                                   onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
-                                <% } %>
+                                    <a href="controller?action=productEdit&id=<%= product.get("id")%>">Edit</a>
+                                    <% if (isAdmin) {%>&nbsp
+                                    <a href="controller?action=productDelete&id=<%= product.get("id")%>" 
+                                       onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                                    <% } %>
                                 </div>
                             </td>
                         </tr>
@@ -254,6 +267,6 @@
                 </table>
             </div>        
         </div>        
-                    
+
     </body>
 </html>

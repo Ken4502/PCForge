@@ -104,6 +104,24 @@
             .changepassword:hover{
                 background-color:lightgray;
             }
+            
+            #passwordForm{
+                display:none;
+                position:absolute;
+                top:200px;
+                left:100px;
+                border-radius: 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                padding:30px 30px;
+                background-color: #ffe8e8;
+            }
+            #change{
+                position:static;
+                right:30px;
+                width:170px;
+            }
+            
+
         </style>
     </head>
     <body>
@@ -112,7 +130,7 @@
             <h1>Profile</h1>
             <img src="UserIcon.png" alt="" width="100" height="100" id="usericon"
                  style="background-color: white; border-radius: 50%; padding: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.2);" />
-            <form action="UserManageServlet" method="get">
+            <form action="UserProfileServlet" method="get">
                 <label>ID:</label>
                 <input type="text" value="<%= user.getId()%>" disabled>
                 <input type="hidden" name="id" value="<%= user.getId()%>">
@@ -126,12 +144,33 @@
 
                 <label>Address:</label>
                 <textarea name="address"><%= user.getAddress()%></textarea>
-                <button class="changepassword">Change password ?</button>
+                <button type="button" class="changepassword" id="togglePasswordForm">Change password ?</button>
                 <input type="submit" value="Edit">
             </form>
         </div>
-        <form action="UserManageServlet" method="post">
-            
-        </form>
+        <div id="passwordForm">
+            <form action="UserProfileServlet" method="post">
+                <h2>Change password</h2>
+                <label>Old Password:</label><br>
+                <input type="password" name="oldPassword"><br>
+
+                <label>New Password</label><br>
+                <input type="password" name="newPassword"><br>
+                <input type="hidden" name="id" value="<%= user.getId()%>">
+
+                <input type="submit" value="Change" id="change">
+            </form>
+        </div>
     </body>
+    <script>
+        document.getElementById("togglePasswordForm").addEventListener("click", function () {
+            var form = document.getElementById("passwordForm");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+    </script>
+</script>
 </html>

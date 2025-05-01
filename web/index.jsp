@@ -15,9 +15,13 @@
                 padding: 0;
                 background-color: #ffcccc;
                 font-size: 18px;
+                display: flex;
+                flex-direction: column;
+                min-height: 900px;
             }
 
             .container {
+                flex: 1;
                 width: 80%;
                 margin: 40px auto;
                 background-color: #ffe8e8;
@@ -241,12 +245,9 @@
 
             .menu-links {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
                 justify-content: center;
-                width: 100%;
+                gap: 20px;
                 margin: 30px 0;
-                gap: 15px;
             }
 
             .menu-links a {
@@ -255,8 +256,7 @@
                 padding: 16px 22px;
                 background-color: #ff9a9a;
                 border-radius: 4px;
-                display: block;
-                width: 400px;
+                display: inline-block;
                 text-align: center;
                 font-size: 26px;
                 box-shadow: 0 2px 3px rgba(0,0,0,0.1);
@@ -335,6 +335,13 @@
                     font-size: 30px;
                 }
             }
+
+            #small-detail{
+                position:absolute;
+                margin:auto;
+                top:400px;
+                font-size:30px;
+            }
         </style>
     </head>
     <body class="body">
@@ -359,6 +366,52 @@
                     %>, <br>Welcome to PC Forge!
                 </h2>
             </div>
+
+            <!-- Show link/buttons for guest and user (not admin) -->
+            <div class="menu-links">
+                <%
+                    if (loggedInAdmin != null) {
+                        // If admin is logged in, show admin features
+                        if (isAdmin) {
+                %>
+                <a href="controller?action=staffmanage">Manage Staff</a>
+                <a href="controller?action=viewOrders">Manage Order Status</a>
+                <a href="controller?action=staffaccountmanage">Manage Account</a>
+                <a href="controller?action=usermanage">Manage User</a>
+                <a href="controller?action=productmanage">Manage Product</a>
+                <a href="controller?action=report">Report</a>
+                <a href="AdminLogoutServlet" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
+                <p id="small-detail">Choose one to manage</p>
+                <%} else {%>
+                <a href="controller?action=viewOrders">Manage Order Status</a>
+                <a href="controller?action=staffaccountmanage">Manage Account</a>
+                <a href="controller?action=usermanage">Manage User</a>
+                <a href="controller?action=productmanage">Manage Product</a>
+                <a href="controller?action=report">Report</a>
+                <a href="AdminLogoutServlet" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
+                <p id="small-detail">Choose one to manage</p>
+                <%}%>
+                <%} else if (loggedInUser != null) {
+                    // If a normal user is logged in, show normal logout
+                %>
+                <a href="controller?action=orderTracking">Track Orders</a>
+                <a href="controller?action=productview">View Product</a>
+                <a href="LogoutServlet">Logout</a>
+                <%
+                } else {
+                    // If no one is logged in, show login/register options
+                %>
+                <a href="controller?action=productview">View Product</a>
+                <a href="controller?action=login">Login</a>
+                <a href="controller?action=register">Sign up now!</a>
+                <a href="controller?action=adminlogin">Staff Portal</a>
+                <%
+                    }
+                %>
+            </div>
+
+            <!-- Only display these sections to guest and user, not to admin -->
+            <% if (loggedInAdmin == null) { %>
             <div class="hero">
                 <div class="hero-content">
                     <h2>Build Your Dream PC with Premium Components</h2>
@@ -378,38 +431,21 @@
                 </div>
             </div>
 
-
-            <!-- About Section -->
-            <div class="about-section">
-                <div class="about-content">
-                    <h3>About PC Forge</h3>
-                    <p>Established in 2000, PC Forge has quickly become a leading supplier of premium computer components. Our mission is to provide PC enthusiasts with top-quality parts at competitive prices.</p>
-                    <p>With a team of passionate tech experts, we carefully select and test every component we sell to ensure reliability, performance, and compatibility. Whether you're building a high-end gaming setup, a workstation for professional use, or upgrading your existing setup, PC Forge has you covered.</p>
-                    <p>We pride ourselves on exceptional customer service and technical support. Our knowledgeable staff is always ready to help you choose the right components for your specific needs and budget.</p>
-                </div>
-                <div class="about-image">
-                    <img src="https://pcforgeph.com/wp-content/uploads/2022/11/transparent-woocommerce.png" alt="PC Forge Store">
-                </div>
-            </div>
-
             <div class="services">
                 <h2 class="section-title">Our Services</h2>
                 <div class="services-grid">
-
                     <!-- Service 1 -->
                     <div class="service-card">
                         <div class="service-icon">🔧</div>
                         <div class="service-title">PC Building</div>
                         <div class="service-description">Let our experts build your custom PC with carefully selected components tailored to your needs and budget.</div>
                     </div>
-
                     <!-- Service 2 -->
                     <div class="service-card">
                         <div class="service-icon">🛠</div>
                         <div class="service-title">Repairs & Upgrades</div>
                         <div class="service-description">Bring new life to your existing PC with our professional repair and upgrade services.</div>
                     </div>
-
                     <!-- Service 3 -->
                     <div class="service-card">
                         <div class="service-icon">💬</div>
@@ -418,46 +454,13 @@
                     </div>
                 </div>
             </div>
-            <div class="menu-links">
-                <%
-                    if (loggedInAdmin != null) {
-                        // If admin is logged in, show admin features
-                        if (isAdmin) {
-                %>
-                <a href="controller?action=staffmanage">Manage Staff</a>
-                <%
-                    }
-                %>
-                <a href="controller?action=viewOrders">Manage Order Status</a>
-                <a href="controller?action=staffaccountmanage">Manage Account</a>
-                <a href="controller?action=usermanage">Manage User</a>
-                <a href="controller?action=productmanage">Manage Product</a>
-                <a href="controller?action=report">Report</a>
-                <a href="AdminLogoutServlet" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
-                <%
-                } else if (loggedInUser != null) {
-                    // If a normal user is logged in, show normal logout
-                %>
-                <a href="controller?action=orderTracking">Track Orders</a>
-                <a href="controller?action=productview">View Product</a>
-                <a href="LogoutServlet">Logout</a>
-                <%
-                } else {
-                    // If no one is logged in, show login/register options
-                %>
-                <a href="controller?action=productview">View Product</a>
-                <a href="controller?action=login">Login</a>
-                <a href="controller?action=register">Sign up now!</a>
-                <a href="controller?action=adminlogin">Staff Portal</a>
-                <%
-                    }
-                %>
-            </div>
+
         </div> 
         <div class="footer">
             <div class="footer-bottom">
                 &copy; 2025 PC Forge. All rights reserved.
             </div>
         </div>
+        <% }%>
     </body>
 </html>
