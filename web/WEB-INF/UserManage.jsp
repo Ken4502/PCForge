@@ -11,7 +11,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User Manage</title>
 
-        <link rel="stylesheet" type="text/css" href="ErrorMessage.css">
     </head>
     <style>
         body {
@@ -137,13 +136,18 @@
         .toggle-button:hover {
             background-color: #0056b3;
         }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
     </style>
     <body>
         <h1>User Manage</h1>
         <button class="toggle-button" onclick="toggleForm()">Add a user</button>
 
         <div class="form-container">
-            <form action="UserManageServlet" method="get" id="userForm" onsubmit="return validateForm();">
+            <form action="UserManageServlet" method="get" id="userForm">
                 <input type="text" name="name" placeholder="Username" required><br>
                 <span class="error-message" id="usernameError"></span>
                 <input type="text" name="email" placeholder="Email Address" required><br>        
