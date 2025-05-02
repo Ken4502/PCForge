@@ -6,6 +6,16 @@
     List<HashMap<String, String>> users = (List<HashMap<String, String>>) request.getAttribute("users");
     Object isAdminObj = session.getAttribute("is_admin"); // Get session attribute
     boolean isAdmin = isAdminObj != null && (Boolean) isAdminObj; // Ensure it's a boolean
+    
+    String sortBy = (String) request.getAttribute("sortBy");
+    String sortOrder = (String) request.getAttribute("sortOrder");
+
+    if (sortBy == null) {
+        sortBy = "id";  // Default sort by user id
+    }
+    if (sortOrder == null) {
+        sortOrder = "ASC";  // Default order is ascending
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -15,6 +25,17 @@
 
     </head>
     <style>
+        .sort-arrow {
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .asc:before {
+                content: "▲";
+            }
+            .desc:before {
+                content: "▼";
+            }
+            
         body {
             font-family: 'Arial', sans-serif;
             font-size: 15px;
@@ -224,11 +245,31 @@
                 </div>
                 <table>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>Register Time</th>
+                        <th>ID
+                        <a href="UserManageServlet?sortBy=id&sortOrder=<%= "id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                        </th>
+                        <th>Name
+                        <a href="UserManageServlet?sortBy=name&sortOrder=<%= "name".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "name".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                        </th>
+                        <th>Email
+                        <a href="UserManageServlet?sortBy=email&sortOrder=<%= "email".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "email".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                        </th>
+                        <th>Address
+                        <a href="UserManageServlet?sortBy=address&sortOrder=<%= "address".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "address".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                        </th>
+                        <th>Register Time
+                        <a href="UserManageServlet?sortBy=created_at&sortOrder=<%= "created_at".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "created_at".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                        </th>
                         <th colspan="2">Action</th>
                     </tr>
                     <% if (users != null && !users.isEmpty()) { %>

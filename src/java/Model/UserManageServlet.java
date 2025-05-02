@@ -53,6 +53,23 @@ public class UserManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+        
+        // Retrieve sorting parameters from the request
+        String sortBy = request.getParameter("sortBy");
+        String sortOrder = request.getParameter("sortOrder");
+
+        // Default sorting if no parameters are provided
+        if (sortBy == null || sortBy.isEmpty()) {
+            sortBy = "id"; // Default sort by id
+        }
+        if (sortOrder == null || sortOrder.isEmpty()) {
+            sortOrder = "ASC"; // Default to ascending order
+        }
+
+        // Validate sortOrder
+        if (!"ASC".equals(sortOrder) && !"DESC".equals(sortOrder)) {
+            sortOrder = "ASC"; // Default to ascending if the order is invalid
+        }
 
         String name = request.getParameter("name");     //retrieve input of add user
         String email = request.getParameter("email");
@@ -104,8 +121,10 @@ public class UserManageServlet extends HttpServlet {
             }
         }
 
-        String sql = "SELECT * FROM users"; //Display user list
+        String sql = "SELECT * FROM users ORDER BY " + sortBy + " " + sortOrder; //Display user list
         request.setAttribute("users", user.getUsers(sql));
+        request.setAttribute("sortBy", sortBy);
+        request.setAttribute("sortOrder", sortOrder);
         request.getRequestDispatcher("WEB-INF/UserManage.jsp").forward(request, response);
     }
 }

@@ -8,7 +8,17 @@
   <link rel="stylesheet" type="text/css" href="BodyStyle.css">
   <meta charset="UTF-8">
   <title>Order Details</title>
-  <style>
+  <style>    
+      .sort-arrow {
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .asc:before {
+                content: "▲";
+            }
+            .desc:before {
+                content: "▼";
+            }
     #searchControls {
       margin-bottom: 1em;
       display: flex;
@@ -119,6 +129,15 @@
         <div class="form-container">
             <%
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String sortBy = (String) request.getAttribute("sortBy");
+                String sortOrder = (String) request.getAttribute("sortOrder");
+
+                if (sortBy == null) {
+                    sortBy = "product_name";  // Default sort by product name
+                }
+                if (sortOrder == null) {
+                    sortOrder = "ASC";  // Default order is ascending
+                }
             %>
             <h2>All Orders</h2><br>
             <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
@@ -143,12 +162,36 @@
           <table id="ordersTable">
             <thead>
               <tr>
-                <th>Order ID</th>
-                <th>User ID</th>
-                <th>Order Date</th>
-                <th>Total Price</th>
-                <th>Status</th>
-                <th>Delivery Address</th>
+                <th>Order ID
+                    <a href="OrderViewAllAdmin?sortBy=order_id&sortOrder=<%= "order_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "order_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                </th>
+                <th>User ID
+                    <a href="OrderViewAllAdmin?sortBy=user_id&sortOrder=<%= "user_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "user_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                </th>
+                <th>Order Date
+                    <a href="OrderViewAllAdmin?sortBy=timestamp&sortOrder=<%= "timestamp".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "timestamp".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                </th>
+                <th>Total Price
+                    <a href="OrderViewAllAdmin?sortBy=total_price&sortOrder=<%= "total_price".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "total_price".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                </th>
+                <th>Status
+                <a href="OrderViewAllAdmin?sortBy=order_status&sortOrder=<%= "order_status".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "order_status".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                </th>
+                <th>Delivery Address
+                <a href="OrderViewAllAdmin?sortBy=delivery_address&sortOrder=<%= "delivery_address".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                                    <span class="sort-arrow <%= "delivery_address".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                                </a>
+                </th>
                 <th>Update Status</th>
               </tr>
             </thead>

@@ -25,6 +25,23 @@ public class StaffManageServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession(false);
+        
+        // Retrieve sorting parameters from the request
+        String sortBy = request.getParameter("sortBy");
+        String sortOrder = request.getParameter("sortOrder");
+
+        // Default sorting if no parameters are provided
+        if (sortBy == null || sortBy.isEmpty()) {
+            sortBy = "id"; // Default sort by id
+        }
+        if (sortOrder == null || sortOrder.isEmpty()) {
+            sortOrder = "ASC"; // Default to ascending order
+        }
+
+        // Validate sortOrder
+        if (!"ASC".equals(sortOrder) && !"DESC".equals(sortOrder)) {
+            sortOrder = "ASC"; // Default to ascending if the order is invalid
+        }
 
         //Ensure user is logged in
         if (session == null || session.getAttribute("adminname") == null) {
@@ -36,7 +53,7 @@ public class StaffManageServlet extends HttpServlet {
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
-                 "SELECT id, username, is_admin, created_at FROM Staff WHERE is_admin = false");
+                 "SELECT id, username, is_admin, created_at FROM Staff WHERE is_admin = false ORDER BY " + sortBy + " " + sortOrder);
              ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
@@ -58,6 +75,9 @@ public class StaffManageServlet extends HttpServlet {
         }
         
         // Store the staff list in request scope and forward it to JSP
+        
+        request.setAttribute("sortBy", sortBy);
+        request.setAttribute("sortOrder", sortOrder);
         request.setAttribute("staffList", staffList);
         request.getRequestDispatcher("WEB-INF/StaffManage.jsp").forward(request, response);
     }

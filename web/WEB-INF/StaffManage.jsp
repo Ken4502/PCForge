@@ -1,10 +1,29 @@
 <%@ page import="java.util.List, java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../Header.jsp"/>
+<%                    String sortBy = (String) request.getAttribute("sortBy");
+                    String sortOrder = (String) request.getAttribute("sortOrder");
+
+                    if (sortBy == null) {
+                        sortBy = "id";  // Default sort by product name
+                    }
+                    if (sortOrder == null) {
+                        sortOrder = "ASC";  // Default order is ascending
+                    }%>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="BodyStyle.css">
     <style>
+        .sort-arrow {
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .asc:before {
+                content: "▲";
+            }
+            .desc:before {
+                content: "▼";
+            }
         body {
             display: flex;
             align-items: top;
@@ -68,13 +87,25 @@
             <h3>Staff List</h3>
             <table style="margin-bottom:10px;">
                 <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Created At</th>
+                    <th>ID
+                        <a href="StaffManageServlet?sortBy=id&sortOrder=<%= "id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            <span class="sort-arrow <%= "id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                        </a>
+                    </th>
+                    <th>Username
+                        <a href="StaffManageServlet?sortBy=username&sortOrder=<%= "username".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            <span class="sort-arrow <%= "username".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                        </a>
+                    </th>
+                    <th>Created At
+                        <a href="StaffManageServlet?sortBy=created_at&sortOrder=<%= "created_at".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            <span class="sort-arrow <%= "created_at".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
+                        </a>
+                    </th>
                     <th>Actions</th> <!-- New column for actions -->
                 </tr>
                 <%
-                    List<HashMap<String, String>> staffList = (List<HashMap<String, String>>) request.getAttribute("staffList");
+                    List<HashMap<String, String>> staffList = (List<HashMap<String, String>>) request.getAttribute("staffList");                    
                     if (staffList != null && !staffList.isEmpty()) {
                         for (HashMap<String, String> staff : staffList) {
                 %>

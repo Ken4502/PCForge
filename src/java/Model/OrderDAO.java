@@ -56,27 +56,41 @@ public class OrderDAO {
         return getOrderItems(orderId);
     }
     
-    
-    public List<Order> getAllOrders() throws SQLException {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders";
+    public List<Order> getAllOrdersSorted(String sortBy, String sortOrder) throws SQLException {
+    List<Order> orders = new ArrayList<>();
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+    // Whitelist for safe column names
+    Set<String> validSortColumns = new HashSet<>(Arrays.asList(
+        "order_id", "user_id", "timestamp", "total_price", "order_status", "delivery_address"
+    ));
 
-            while (rs.next()) {
-                Order order = new Order();
-                order.setOrderId(rs.getInt("order_id"));
-                order.setTotalPrice(rs.getBigDecimal("total_price"));
-                order.setStatus(rs.getString("order_status"));
-                order.setDeliveryAddress(rs.getString("delivery_address"));
-                order.setOrderDate(rs.getTimestamp("timestamp"));
-                order.setUserId(rs.getInt("user_id"));
-                orders.add(order);
-            }
-        }
-    return orders;
+    if (!validSortColumns.contains(sortBy)) {
+        sortBy = "order_id"; // default fallback
     }
+
+    if (!"ASC".equalsIgnoreCase(sortOrder) && !"DESC".equalsIgnoreCase(sortOrder)) {
+        sortOrder = "ASC"; // only allow ASC or DESC
+    }
+
+    String sql = "SELECT * FROM orders ORDER BY " + sortBy + " " + sortOrder;
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Order order = new Order();
+            order.setOrderId(rs.getInt("order_id"));
+            order.setTotalPrice(rs.getBigDecimal("total_price"));
+            order.setStatus(rs.getString("order_status"));
+            order.setDeliveryAddress(rs.getString("delivery_address"));
+            order.setOrderDate(rs.getTimestamp("timestamp"));
+            order.setUserId(rs.getInt("user_id"));
+            orders.add(order);
+        }
+    }
+    return orders;
+}
+
     
     public void updateOrderStatus(int orderId, String newStatus) throws SQLException {
         String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
@@ -87,4 +101,6 @@ public class OrderDAO {
         }
     }
 
+    
+    
 }

@@ -42,10 +42,10 @@
                 font-size: 14px;
             }
             .asc:before {
-                content: "↑";
+                content: "▲";
             }
             .desc:before {
-                content: "↓";
+                content: "▼";
             }
             body {
                 font-size: 15px;
