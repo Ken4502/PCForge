@@ -31,6 +31,7 @@ public class ReportServlet extends HttpServlet {
             throws ServletException, IOException {
         String fromString = request.getParameter("from");
         String toString = request.getParameter("to");
+        String product = request.getParameter("product");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate from = null;
@@ -47,13 +48,76 @@ public class ReportServlet extends HttpServlet {
             e.printStackTrace(); // You could redirect to an error page or show message
         }
 
-        List<HashMap<String, String>> barChart = getBarChart(from, to);
-        
+        List<HashMap<String, String>> barChart = new ArrayList<>();
+
+        if (product != null && !product.isEmpty()) {
+            barChart = getProductChart(from, to);
+        } else {
+            barChart = getBarChart(from, to);
+        }
 
         request.setAttribute("from", from);
         request.setAttribute("to", to);
         request.setAttribute("barChart", barChart);
+        request.setAttribute("product", product);
         request.getRequestDispatcher("WEB-INF/Report.jsp").forward(request, response);
+    }
+
+    public List<HashMap<String, String>> getProductChart(LocalDate from, LocalDate to) {
+        List<HashMap<String, String>> result = new ArrayList<>();
+
+        if (from == null && to == null) {
+            barchartSQL
+                    = "SELECT p.product_name AS product, SUM(oi.price * oi.quantity) AS total_sales "
+                    + "FROM order_items oi "
+                    + "JOIN products p ON oi.product_id = p.id "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "GROUP BY p.product_name "
+                    + "ORDER BY total_sales DESC";
+        } else if (from == null && to != null) {
+            barchartSQL
+                    = "SELECT p.product_name AS product, SUM(oi.price * oi.quantity) AS total_sales "
+                    + "FROM order_items oi "
+                    + "JOIN products p ON oi.product_id = p.id "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "JOIN orders o ON oi.order_id = o.order_id "
+                    + "WHERE o.timestamp <= '" + to + " 23:59:59.999' "
+                    + "GROUP BY p.product_name "
+                    + "ORDER BY total_sales DESC";
+        } else if (to == null && from != null) {
+            barchartSQL
+                    = "SELECT p.product_name AS product, SUM(oi.price * oi.quantity) AS total_sales "
+                    + "FROM order_items oi "
+                    + "JOIN products p ON oi.product_id = p.id "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "JOIN orders o ON oi.order_id = o.order_id "
+                    + "WHERE o.timestamp >= '" + from + " 00:00:00.000' "
+                    + "GROUP BY p.product_name "
+                    + "ORDER BY total_sales DESC";
+        } else {
+            barchartSQL
+                    = "SELECT p.product_name AS product, SUM(oi.price * oi.quantity) AS total_sales "
+                    + "FROM order_items oi "
+                    + "JOIN products p ON oi.product_id = p.id "
+                    + "JOIN category c ON p.category_id = c.id "
+                    + "JOIN orders o ON oi.order_id = o.order_id "
+                    + "WHERE o.timestamp >= '" + from + " 00:00:00.000' AND o.timestamp < '" + to + " 23:59:59.999' "
+                    + "GROUP BY p.product_name "
+                    + "ORDER BY total_sales DESC";
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(barchartSQL); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                HashMap<String, String> resultset = new HashMap<>();
+
+                resultset.put("product", rs.getString("product"));
+                resultset.put("totalSales", rs.getString("total_sales"));
+                result.add(resultset);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public List<HashMap<String, String>> getBarChart(LocalDate from, LocalDate to) {
@@ -102,6 +166,7 @@ public class ReportServlet extends HttpServlet {
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(barchartSQL); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 HashMap<String, String> resultset = new HashMap<>();
+
                 resultset.put("category", rs.getString("category"));
                 resultset.put("totalSales", rs.getString("total_sales"));
                 result.add(resultset);
