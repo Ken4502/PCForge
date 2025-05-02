@@ -120,7 +120,8 @@
             <%
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             %>
-          <h2>All Orders</h2>
+            <h2>All Orders</h2><br>
+            <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
 
           <div id="searchControls">
             <label for="searchBy" style="font-size:18px;">Search by:</label>

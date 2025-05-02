@@ -125,7 +125,7 @@
         </style>
     </head>
     <body>
-        <button type="button" onclick="history.back();" style="width:80px;height:40px;">Back</button>
+        <button type="button" onclick="location.href = 'controller?';" style="width:80px;height:40px;">Back</button>
         <div class="profile-container">
             <h1>Profile</h1>
             <img src="UserIcon.png" alt="" width="100" height="100" id="usericon"

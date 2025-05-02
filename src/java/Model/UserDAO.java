@@ -165,11 +165,23 @@ public class UserDAO {
     }
 
     public boolean deleteUser(String id) {
-        String sql = "DELETE FROM users WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(id));
-            stmt.executeUpdate();
+            //Check whether the user have order something or not
+            String sqlOrderItem = "DELETE FROM order_items WHERE order_id IN (SELECT order_id FROM orders WHERE user_id = ?)";
+            PreparedStatement orderItemStmt = conn.prepareStatement(sqlOrderItem);
+            orderItemStmt.setInt(1, Integer.parseInt(id));
+            orderItemStmt.executeUpdate();
+            
+            String sqlOrder = "DELETE FROM orders WHERE user_id = ?";
+            PreparedStatement orderStmt = conn.prepareStatement(sqlOrder);
+            orderStmt.setInt(1, Integer.parseInt(id));
+            orderStmt.executeUpdate();
+
+            //Delete all the orders first
+            String sqlUser = "DELETE FROM users WHERE id = ?"; // Then only delete the user
+            PreparedStatement userStmt = conn.prepareStatement(sqlUser);
+            userStmt.setInt(1, Integer.parseInt(id));
+            userStmt.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

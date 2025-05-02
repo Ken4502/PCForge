@@ -4,7 +4,6 @@
 
 <%
     List<HashMap<String, String>> users = (List<HashMap<String, String>>) request.getAttribute("users");
-
     Object isAdminObj = session.getAttribute("is_admin"); // Get session attribute
     boolean isAdmin = isAdminObj != null && (Boolean) isAdminObj; // Ensure it's a boolean
 %>
@@ -20,7 +19,6 @@
             font-family: 'Arial', sans-serif;
             font-size: 15px;
             display: flex;
-            align-items: top;
             justify-content: center;
             background-color: #ffcccc;
         }
@@ -147,12 +145,44 @@
             color: #666;
         }
 
+        select[id="searchBy"] {
+            width: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        input[type="text"]#searchInput {
+            width: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        #searchControls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+        }
+
+
     </style>
     <body>
         <div class="container">
             <div class="form-container">
                 <h1>User Manage</h1>
                 <button class="toggle-button" onclick="toggleForm()">Add a user</button>
+                <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
+
 
                 <form action="UserManageServlet" method="get" id="userForm">
                     <div class="input-group">                
@@ -175,6 +205,23 @@
                 </form>
 
 
+                <div id="searchControls">
+                    <label for="searchBy" style="font-size:18px;">Search by:</label>
+
+                    <select id="searchBy">
+                        <option value="id">ID</option>
+                        <option value="name">Name</option>
+                        <option value="email">Email</option>
+                        <option value="address">Address</option>
+                    </select>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        onkeyup="searchUsers()"
+                        placeholder="Enter search term…"
+                        title="Type to search"
+                        />
+                </div>
                 <table>
                     <tr>
                         <th>ID</th>
@@ -225,6 +272,33 @@
                 var form = document.getElementById("userForm");
                 form.style.display = (form.style.display === "none") ? "block" : "none";
             }
+
+            function searchUsers() {
+                const input = document.getElementById("searchInput").value.toUpperCase();
+                const filterCol = document.getElementById("searchBy").value;
+                const table = document.querySelector("table");
+                const trs = table.tBodies[0].getElementsByTagName("tr");
+
+                // Column indices: id=0, name=1, email=2, address=3
+                const colMap = {id: 0, name: 1, email: 2, address: 3};
+
+                for (const tr of trs) {
+                    let txt = "";
+                    if (tr.getElementsByTagName("td").length === 0)
+                        continue; // skip header/footer
+                    if (filterCol === "all") {
+                        const tds = tr.getElementsByTagName("td");
+                        for (let i = 0; i < tds.length; i++) {
+                            txt += tds[i].textContent + " ";
+                        }
+                    } else {
+                        const idx = colMap[filterCol];
+                        txt = tr.getElementsByTagName("td")[idx].textContent;
+                    }
+                    tr.style.display = txt.toUpperCase().includes(input) ? "" : "none";
+                }
+            }
+
         </script>
     </body>
 </html>

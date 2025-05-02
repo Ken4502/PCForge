@@ -26,10 +26,10 @@ public class Product implements Serializable{
     public String getImageUrl() { return imageUrl; }
     public String getCategoryName() { return categoryName; }
     
-    public void setId() { this.id = id; }
-    public void setProductName() { this.productName = productName; }
-    public void setPrice() { this.price = price; }
-    public void setQuantity() { this.quantity = quantity; }
-    public void setImageUrl() { this.imageUrl = imageUrl; }
-    public void setCategoryName() { this.categoryName = categoryName; }
+    public void setId(int id) { this.id = id; }
+    public void setProductName(String productName) { this.productName = productName; }
+    public void setPrice(double price) { this.price = price; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 }

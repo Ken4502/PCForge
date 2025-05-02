@@ -178,8 +178,9 @@
                     <a href="controller?action=productadd">Add Product</a>&nbsp
                     <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
                     <form action="ProductManageServlet" method="GET">
-                        <div class="form-group">
-                            <input type="text" name="search" placeholder="Enter product name">&nbsp&nbsp&nbsp
+                        <div class="form-group">                   
+                            <label for="searchBy" style="font-size:18px;">Search by:</label>
+
                             <%
                                 if (categoryList != null) {
                             %>
@@ -198,6 +199,7 @@
                             <%
                                 }
                             %>
+                            <input type="text" name="search" placeholder="Enter product name">
                             <input type="submit" value="Search">
 
                         </div>

@@ -31,9 +31,26 @@
       text-align: left; white-space: nowrap;
     }
     th { background-color: #f2f2f2; }
+    
+            .back-btn {
+                background-color: #ff9999;
+                color: black;
+                border: none;
+                display: block;
+                position:absolute;
+                top:130px;
+                left:30px;
+                padding: 10px;
+                background-color: #ff9999;
+                color: black;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
   </style>
 </head>
 <body class="body">
+        <button type="button" class='back-btn' onclick="history.back();" style="width:80px;height:40px;">Back</button>
   <div class="confirmation-container">
     <%
       List<HashMap<String,String>> cart = 

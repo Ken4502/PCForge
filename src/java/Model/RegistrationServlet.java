@@ -118,7 +118,7 @@ public class RegistrationServlet extends HttpServlet {
                 ps.setString(3, hashedPassword);
                 ps.setString(4, address);
                 ps.executeUpdate();
-                Utils.showAlert(out, "User added successfully!", request, response, "controller?action=login");
+                Utils.showAlert(out, "Registered successfully!", request, response, "controller?action=login");
             } catch (SQLException e) {
                 e.printStackTrace();
                 Utils.showAlert(out, "Database error occurred!", request, response, "controller?action=register");

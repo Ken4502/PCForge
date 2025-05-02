@@ -24,7 +24,7 @@
         <title>Report</title>
     </head>
     <style>
-        * {           
+        * {
             font-family: sans-serif;
             color: black;
         }
@@ -89,20 +89,36 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .form-container {
             background-color: white;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .btn {
+            margin-bottom:20px;
+            width: auto;
+            padding: 10px;
+            background-color: #ff9999;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e47575;
+        }
     </style>
     <body>
         <div class="container">
-            <div class="form-container">        
+            <div class="form-container">      
+
                 <h1>Top Sales Report</h1>
-                <!--<a href="">Top Sales Report</a>
-                <a href="">Potential Customer</a>-->
+                <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button><br>
                 <form action="ReportServlet" method="GET">
                     From
                     <input type="date" name="from" id="from" value="<%=from != null ? from : ""%>">

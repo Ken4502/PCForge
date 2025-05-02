@@ -14,7 +14,7 @@ public class ProductDAO {
         String sql = "SELECT COUNT(DISTINCT o.user_id) AS total_users_ordered "
                 + "FROM order_items oi "
                 + "JOIN orders o ON oi.order_id = o.order_id "
-                + "WHERE oi.product_id = ?;";
+                + "WHERE oi.product_id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, id);
