@@ -144,7 +144,7 @@
 
                 <label>Address:</label>
                 <textarea name="address"><%= user.getAddress()%></textarea>
-                <button type="button" class="changepassword" id="togglePasswordForm">Change password ?</button>
+                <button type="button" class="changepassword" id="togglePasswordForm" style="background-color: #ff9999" >Change password ?</button>
                 <input type="submit" value="Edit">
             </form>
         </div>
