@@ -14,6 +14,7 @@
         HashMap<String, String> item = barChart.get(i);
         totalsales += Double.parseDouble(item.get("totalSales"));
     }
+    String product = (String) request.getAttribute("product");
 %>
 <html>
     <head>
@@ -112,18 +113,49 @@
         .btn:hover {
             background-color: #e47575;
         }
+        .twobutton {
+            background-color: #007BFF; /* A clean blue */
+            color: white;
+            font-size: 15px;
+            padding: 10px 20px;
+            margin-right: 10px; /* space between buttons */
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .twobutton:hover {
+            background-color: #339AFF; /* lighter on hover */
+            transform: translateY(-2px); /* subtle lift on hover */
+        }
     </style>
     <body>
         <div class="container">
-            <div class="form-container">      
-
-                <h1>Top Sales Report</h1>
+            <div class="form-container">   
+                <% if (product != null && !product.isEmpty()) { %>
+                <h1>Top Sales Product Report</h1>
+                <% } else { %>
+                <h1>Top Sales Category Report</h1>
+                <% }%>
                 <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button><br>
+
+                <form action="ReportServlet" method="GET">
+                    <input type="submit" value="Top Sales Product" class="twobutton">
+                    <input type="hidden" name="product" value="product">
+                </form>
+                <form action="ReportServlet" method="GET">
+                    <input type="submit" value="Top Sales Category" class="twobutton">
+                </form>
+
                 <form action="ReportServlet" method="GET">
                     From
                     <input type="date" name="from" id="from" value="<%=from != null ? from : ""%>">
                     to
                     <input type="date" name="to" id="to" value="<%=to != null ? to : ""%>">
+                    <% if (product != null && !product.isEmpty()) { %>
+                    <input type="hidden" name="product" value="product"> <!--act as a session -->
+                    <% } %>
                     <button type="submit" onclick="return validationDate()">Apply</button>
                 </form>
                 <div class="chart-container">
@@ -131,13 +163,24 @@
 
                     <div class="sales-list">
                         <%if (barChart != null && !barChart.isEmpty()) {%><!--if have record found within the date-->
+
+
+                        <% if (product != null && !product.isEmpty()) { %>
+                        <h3>Sales by Product</h3>
+                        <% } else {%>
                         <h3>Sales by Category</h3>
+                        <%}%>
                         <table style="font-size:20px;">
                             <%if (barChart != null) {%>
                             <% for (int i = 0; i < barChart.size(); i++) {
                                     HashMap<String, String> item = barChart.get(i);%>
                             <tr>
+
+                                <% if (product != null && !product.isEmpty()) {%>
+                                <td><%=i + 1%>. <%= item.get("product")%></td>
+                                <% } else {%>
                                 <td><%=i + 1%>. <%= item.get("category")%></td>
+                                <% }%>
                                 <th>RM</th>
                                 <th style="text-align:right;"> <%= item.get("totalSales")%></th>
                             </tr>
@@ -166,7 +209,11 @@
                 </div>
                 <table style="font-size:20px;">
                     <tr>
+                        <% if (product != null && !product.isEmpty()) {%>
+                        <th>Total products</th>
+                            <% } else { %>
                         <th>Total categories</th>
+                            <% }%>
                         <td>: <%= (barChart != null ? barChart.size() : 0)%></td>
                     </tr>
                     <tr>
@@ -198,15 +245,20 @@
 
 
         //Bar Chart script
+        <%
+            boolean isProductMode = product != null && !product.isEmpty();
+        %>
+
         const xValues = [<%
             for (int i = 0; i < barChart.size(); i++) {
                 HashMap<String, String> item = barChart.get(i);
-                out.println("\"" + item.get("category") + "\"");
+                out.println("\"" + item.get(isProductMode ? "product" : "category") + "\"");
                 if (i < barChart.size() - 1) {
                     out.println(", ");
                 }
             }
         %>];
+
         const yValues = [<%
             for (int i = 0; i < barChart.size(); i++) {
                 HashMap<String, String> item = barChart.get(i);
@@ -247,20 +299,39 @@
                 },
         <%  //The condition of title
             String chartTitle;
-            if (barChart != null && !barChart.isEmpty()) {
-                if (from == null && to == null) {
-                    chartTitle = "Bar Chart of Top Sales";
-                } else if (from != null && to != null && from.equals(to)) {
-                    chartTitle = "Bar Chart of Top Sales at " + from;
-                } else if (from != null && to == null) {
-                    chartTitle = "Bar Chart of Top Sales after " + from;
-                } else if (to != null && from == null) {
-                    chartTitle = "Bar Chart of Top Sales before " + to;
+
+            if (product != null && !product.isEmpty()) {
+                if (barChart != null && !barChart.isEmpty()) {
+                    if (from == null && to == null) {
+                        chartTitle = "Bar Chart of Top Sales Product";
+                    } else if (from != null && to != null && from.equals(to)) {
+                        chartTitle = "Bar Chart of Top Sales Product at " + from;
+                    } else if (from != null && to == null) {
+                        chartTitle = "Bar Chart of Top Sales Product after " + from;
+                    } else if (to != null && from == null) {
+                        chartTitle = "Bar Chart of Top Sales Product before " + to;
+                    } else {
+                        chartTitle = "Bar Chart of Top Sales Product from (" + from + " to " + to + ")";
+                    }
                 } else {
-                    chartTitle = "Bar Chart of Top Sales from (" + from + " to " + to + ")";
+                    chartTitle = "No record";
                 }
             } else {
-                chartTitle = "No record";
+                if (barChart != null && !barChart.isEmpty()) {
+                    if (from == null && to == null) {
+                        chartTitle = "Bar Chart of Top Sales Category";
+                    } else if (from != null && to != null && from.equals(to)) {
+                        chartTitle = "Bar Chart of Top Sales Category at " + from;
+                    } else if (from != null && to == null) {
+                        chartTitle = "Bar Chart of Top Sales Category after " + from;
+                    } else if (to != null && from == null) {
+                        chartTitle = "Bar Chart of Top Sales Category before " + to;
+                    } else {
+                        chartTitle = "Bar Chart of Top Sales Category from (" + from + " to " + to + ")";
+                    }
+                } else {
+                    chartTitle = "No record";
+                }
             }
         %>
                 title: {
