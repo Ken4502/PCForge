@@ -30,12 +30,12 @@
                 font-size: 14px;
             }
             .asc:before {
-                content: "▲";
+                content: "\25B2"; 
             }
             .desc:before {
-                content: "▼";
+                content: "\25BC"; 
             }
-            
+           
         body {
             font-family: 'Arial', sans-serif;
             font-size: 15px;
