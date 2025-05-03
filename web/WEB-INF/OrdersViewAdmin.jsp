@@ -4,12 +4,12 @@
 <jsp:include page="../Header.jsp"/>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <link rel="stylesheet" type="text/css" href="BodyStyle.css">
-  <meta charset="UTF-8">
-  <title>Order Details</title>
-  <style>    
-      .sort-arrow {
+    <head>
+        <link rel="stylesheet" type="text/css" href="BodyStyle.css">
+        <meta charset="UTF-8">
+        <title>Order Details</title>
+        <style>
+            .sort-arrow {
                 cursor: pointer;
                 font-size: 14px;
             }
@@ -19,38 +19,38 @@
             .desc:before {
                 content: "▼";
             }
-    #searchControls {
-      margin-bottom: 1em;
-      display: flex;
-      gap: 0.5em;
-      align-items: center;
-    }
-    #searchInput {
-      flex: 1;
-      padding: 0.5em;
-      font-size: 1em;
-    }
-    #searchBy {
-      padding: 0.5em;
-    }
-    #ordersTable {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    #ordersTable th, #ordersTable td {
-      border: 1px solid #black;
-      padding: 8px;
-      text-align: left;
-      white-space: nowrap;
-    }
-    #ordersTable th {
-      background: #ff9999;
-    }
-    form {
-      margin: 0;
-    }
-    
-    body {
+            #searchControls {
+                margin-bottom: 1em;
+                display: flex;
+                gap: 0.5em;
+                align-items: center;
+            }
+            #searchInput {
+                flex: 1;
+                padding: 0.5em;
+                font-size: 1em;
+            }
+            #searchBy {
+                padding: 0.5em;
+            }
+            #ordersTable {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            #ordersTable th, #ordersTable td {
+                border: 1px solid #black;
+                padding: 8px;
+                text-align: left;
+                white-space: nowrap;
+            }
+            #ordersTable th {
+                background: #ff9999;
+            }
+            form {
+                margin: 0;
+            }
+
+            body {
                 font-size: 15px;
                 display: flex;
                 align-items: top;
@@ -69,7 +69,7 @@
                 color: #333;
             }
             .container {
-                width: 100%;           
+                width: 100%;
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
@@ -80,192 +80,208 @@
                 border-radius: 8px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
-    .btn {
-            width: auto;    
-            padding: 10px;
-            background-color: #ff9999;
-            color: black;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: background-color 0.3s;
-        }
+            .btn {
+                width: auto;
+                padding: 10px;
+                background-color: #ff9999;
+                color: black;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background-color 0.3s;
+            }
 
-        .btn:hover {
-            background-color: #e47575;
-        }
-        select[name="newStatus"]{
-            width: auto;
+            .btn:hover {
+                background-color: #e47575;
+            }
+            select[name="newStatus"]{
+                width: auto;
                 margin-top: 10px;
                 margin-bottom: 10px;
                 padding: 10px;
                 border: 1px solid #ddd;
                 border-radius: 4px;
                 font-size: 15px;
-        }    
-        select[id="searchBy"]{
-            width: auto;
+            }
+            select[id="searchBy"]{
+                width: auto;
                 margin-top: 10px;
                 margin-bottom: 10px;
                 padding: 10px;
                 border: 1px solid #ddd;
                 border-radius: 4px;
                 font-size: 15px;
-        }    
-        input[type="text"]{
-            width: auto;
+            }
+            input[type="text"]{
+                width: auto;
                 margin-top: 10px;
                 margin-bottom: 10px;
                 padding: 10px;
                 border: 1px solid #ddd;
                 border-radius: 4px;
                 font-size: 15px;
-        }    
-  </style>
-</head>
-<body class="body">
-    <div class="container">
-        <div class="form-container">
-            <%
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                String sortBy = (String) request.getAttribute("sortBy");
-                String sortOrder = (String) request.getAttribute("sortOrder");
+            }
+        </style>
+    </head>
+    <body class="body">
+        <div class="container">
+            <div class="form-container">
+                <%
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String sortBy = (String) request.getAttribute("sortBy");
+                    String sortOrder = (String) request.getAttribute("sortOrder");
 
-                if (sortBy == null) {
-                    sortBy = "product_name";  // Default sort by product name
-                }
-                if (sortOrder == null) {
-                    sortOrder = "ASC";  // Default order is ascending
-                }
-            %>
-            <h2>All Orders</h2><br>
-            <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
+                    if (sortBy == null) {
+                        sortBy = "product_name";  // Default sort by product name
+                    }
+                    if (sortOrder == null) {
+                        sortOrder = "ASC";  // Default order is ascending
+                    }
+                %>
+                <h2>All Orders</h2><br>
+                <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button>
 
-          <div id="searchControls">
-            <label for="searchBy" style="font-size:18px;">Search by:</label>
-            <select id="searchBy">
-              <option value="all">All</option>
-              <option value="orderId">Order ID</option>
-              <option value="userId">User ID</option>
-              <option value="deliveryAddress">Delivery Address</option>
-            </select>
-            <input
-              type="text"
-              id="searchInput"
-              onkeyup="searchOrders()"
-              placeholder="Enter search term…"
-              title="Type to search"
-            />
-          </div>
+                <div id="searchControls">
+                    <label for="searchBy" style="font-size:18px;">Search by:</label>
+                    <select id="searchBy">
+                        <option value="all">All</option>
+                        <option value="orderId">Order ID</option>
+                        <option value="userId">User ID</option>
+                        <option value="deliveryAddress">Delivery Address</option>
+                    </select>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        onkeyup="searchOrders()"
+                        placeholder="Enter search term…"
+                        title="Type to search"
+                        />
+                </div>
 
-          <table id="ordersTable">
-            <thead>
-              <tr>
-                <th>Order ID
-                    <a href="OrderViewAllAdmin?sortBy=order_id&sortOrder=<%= "order_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID
+                                <a href="OrderViewAllAdmin?sortBy=order_id&sortOrder=<%= "order_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
                                     <span class="sort-arrow <%= "order_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
                                 </a>
-                </th>
-                <th>User ID
-                    <a href="OrderViewAllAdmin?sortBy=user_id&sortOrder=<%= "user_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            </th>
+                            <th>User ID
+                                <a href="OrderViewAllAdmin?sortBy=user_id&sortOrder=<%= "user_id".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
                                     <span class="sort-arrow <%= "user_id".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
                                 </a>
-                </th>
-                <th>Order Date
-                    <a href="OrderViewAllAdmin?sortBy=timestamp&sortOrder=<%= "timestamp".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            </th>
+                            <th>Order Date
+                                <a href="OrderViewAllAdmin?sortBy=timestamp&sortOrder=<%= "timestamp".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
                                     <span class="sort-arrow <%= "timestamp".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
                                 </a>
-                </th>
-                <th>Total Price
-                    <a href="OrderViewAllAdmin?sortBy=total_price&sortOrder=<%= "total_price".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            </th>
+                            <th>Total Price
+                                <a href="OrderViewAllAdmin?sortBy=total_price&sortOrder=<%= "total_price".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
                                     <span class="sort-arrow <%= "total_price".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
                                 </a>
-                </th>
-                <th>Status
-                <a href="OrderViewAllAdmin?sortBy=order_status&sortOrder=<%= "order_status".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            </th>
+                            <th>Status
+                                <a href="OrderViewAllAdmin?sortBy=order_status&sortOrder=<%= "order_status".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
                                     <span class="sort-arrow <%= "order_status".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
                                 </a>
-                </th>
-                <th>Delivery Address
-                <a href="OrderViewAllAdmin?sortBy=delivery_address&sortOrder=<%= "delivery_address".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
+                            </th>
+                            <th>Delivery Address
+                                <a href="OrderViewAllAdmin?sortBy=delivery_address&sortOrder=<%= "delivery_address".equals(sortBy) && "ASC".equals(sortOrder) ? "DESC" : "ASC"%>">
                                     <span class="sort-arrow <%= "delivery_address".equals(sortBy) ? sortOrder.toLowerCase() : "asc"%>"></span>
                                 </a>
-                </th>
-                <th>Update Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <%
-                List<Order> orders = (List<Order>) request.getAttribute("orders");
-                if (orders != null && !orders.isEmpty()) {
-                  for (Order order : orders) {
-              %>
-              <tr>
-                <td><%= order.getOrderId() %></td>
-                <td><%= order.getUserId() %></td>
-                <td><%= sdf.format(order.getOrderDate()) %></td>
-                <td>RM<%= order.getTotalPrice() %></td>
-                <td><%= order.getStatus() %></td>
-                <td><%= order.getDeliveryAddress() %></td>
-                <td>
-                  <form method="post" action="UpdateOrderStatusServlet" onsubmit="return confirmStatusChange(this);">
-                    <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
-                    <select name="newStatus" required>
-                      <option value="Packaging" <%= "Packaging".equals(order.getStatus()) ? "selected" : "" %>>Packaging</option>
-                      <option value="Shipping"  <%= "Shipping".equals(order.getStatus())  ? "selected" : "" %>>Shipping</option>
-                      <option value="Delivering"  <%= "Delivering".equals(order.getStatus())  ? "selected" : "" %>>Delivering</option>
-                      <option value="Delivered"  <%= "Delivered".equals(order.getStatus())  ? "selected" : "" %>>Delivered</option>
-                      <option value="Cancelled"  <%= "Cancelled".equals(order.getStatus())  ? "selected" : "" %>>Cancelled</option>
-                    </select>
-                    <button type="submit" class="btn">Update</button>
-                  </form>
-                </td>
-              </tr>
-              <%
-                  }
-                } else {
-              %>
-              <tr>
-                <td colspan="7">No orders found.</td>
-              </tr>
-              <%
+                            </th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            List<Order> orders = (List<Order>) request.getAttribute("orders");
+                            if (orders != null && !orders.isEmpty()) {
+                                for (Order order : orders) {
+                        %>
+                        <tr>
+                            <td><%= order.getOrderId()%></td>
+                            <td><%= order.getUserId()%></td>
+                            <td><%= sdf.format(order.getOrderDate())%></td>
+                            <td>RM<%= order.getTotalPrice()%></td>
+                            <td><%= order.getStatus()%></td>
+                            <td><%= order.getDeliveryAddress()%></td>
+                            <td>
+                                <form method="post" action="UpdateOrderStatusServlet" onsubmit="return confirmStatusChange(this);">
+                                    <input type="hidden" name="orderId" value="<%= order.getOrderId()%>">
+                                    <%
+                                        String[] statuses = {"Packaging", "Shipping", "Delivering", "Delivered", "Cancelled"};
+                                        int currentIndex = -1;
+                                        for (int i = 0; i < statuses.length; i++) {
+                                            if (statuses[i].equals(order.getStatus())) {
+                                                currentIndex = i;
+                                                break;
+                                            }
+                                        }
+                                    %>
+                                    <select name="newStatus" required>
+                                        <%
+                                            for (int i = 0; i < statuses.length; i++) {
+                                                String status = statuses[i];
+                                                boolean selected = status.equals(order.getStatus());
+                                                boolean disabled = i < currentIndex; // disable previous statuses
+%>
+                                        <option value="<%= status%>" <%= selected ? "selected" : ""%> <%= disabled ? "disabled" : ""%>><%= status%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+
+                                    <button type="submit" class="btn">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        } else {
+                        %>
+                        <tr>
+                            <td colspan="7">No orders found.</td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+        <script>
+            function searchOrders() {
+                const input = document.getElementById("searchInput").value.toUpperCase();
+                const filterCol = document.getElementById("searchBy").value;
+                const table = document.getElementById("ordersTable");
+                const trs = table.tBodies[0].getElementsByTagName("tr");
+
+                // Column indices: orderId=0, userId=1, deliveryAddress=5
+                const colMap = {orderId: 0, userId: 1, deliveryAddress: 5};
+
+                for (const tr of trs) {
+                    let txt = "";
+                    if (filterCol === "all") {
+                        // concat all cells
+                        const tds = tr.getElementsByTagName("td");
+                        for (let i = 0; i < tds.length; i++) {
+                            txt += tds[i].textContent + " ";
+                        }
+                    } else {
+                        const idx = colMap[filterCol];
+                        txt = tr.getElementsByTagName("td")[idx].textContent;
+                    }
+                    tr.style.display = txt.toUpperCase().includes(input) ? "" : "none";
                 }
-              %>
-            </tbody>
-          </table>
-        </div>
-    </div>        
-  <script>
-    function searchOrders() {
-      const input = document.getElementById("searchInput").value.toUpperCase();
-      const filterCol = document.getElementById("searchBy").value;
-      const table = document.getElementById("ordersTable");
-      const trs = table.tBodies[0].getElementsByTagName("tr");
+            }
 
-      // Column indices: orderId=0, userId=1, deliveryAddress=5
-      const colMap = { orderId: 0, userId: 1, deliveryAddress: 5 };
-
-      for (const tr of trs) {
-        let txt = "";
-        if (filterCol === "all") {
-          // concat all cells
-          const tds = tr.getElementsByTagName("td");
-          for (let i=0; i<tds.length; i++) {
-            txt += tds[i].textContent + " ";
-          }
-        } else {
-          const idx = colMap[filterCol];
-          txt = tr.getElementsByTagName("td")[idx].textContent;
-        }
-        tr.style.display = txt.toUpperCase().includes(input) ? "" : "none";
-      }
-    }
-
-    function confirmStatusChange(form) {
-      const status = form.newStatus.value;
-      return confirm(`Are you sure you want to mark this order as "${status}"?`);
-    }
-  </script>
-</body>
+            function confirmStatusChange(form) {
+                const status = form.newStatus.value;
+                return confirm(`Are you sure you want to mark this order as "${status}"?`);
+            }
+        </script>
+    </body>
 </html>
