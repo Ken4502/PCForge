@@ -13,7 +13,8 @@ public class OrderDAO {
     public List<Order> getOrdersByUserId(int userId) throws SQLException {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT order_id, total_price, order_status, delivery_address, timestamp, user_id "
-                   + "FROM Orders WHERE user_id = ?";
+                   + "FROM Orders WHERE user_id = ?"
+                   + "ORDER BY timestamp DESC";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();

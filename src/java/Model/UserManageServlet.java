@@ -1,8 +1,6 @@
 package Model;
 
-import Model.UserDAO;
 import Util.Utils;
-import Util.registrationValidator;
 import java.io.*;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -15,8 +13,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "UserManageServlet", urlPatterns = {"/UserManageServlet"})
 public class UserManageServlet extends HttpServlet {
 
-    UserDAO user = new UserDAO();
-    User edituser = new User();
+    UserDAO user;
+    User edituser;
 
     @Override
     public void init() throws ServletException {
@@ -34,18 +32,22 @@ public class UserManageServlet extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
+        
 
         String valid = "User Edit successfull !!";
-        if (valid.equals(user.editUser(id, name, email, address))) {
+        String result = user.editUser(id, name, email, address);
+        if (valid.equals(result)) {
             Utils.showAlert(out, "Edit successfull !!", request, response, "controller?action=usermanage");
         } else {
             edituser.setId(Integer.parseInt(id));
             edituser.setName(name);
             edituser.setEmail(email);
             edituser.setAddress(address);
+            
+            HttpSession session = request.getSession();
+            session.setAttribute("user",edituser);
 
-            String error = user.editUser(id, name, email, address);
-            Utils.showAlert(out, error, request, response, "controller?action=usermanage");
+            Utils.remainPage(out, result, request, response);
         }
     }
 
@@ -53,7 +55,7 @@ public class UserManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        
+
         // Retrieve sorting parameters from the request
         String sortBy = request.getParameter("sortBy");
         String sortOrder = request.getParameter("sortOrder");
@@ -91,20 +93,11 @@ public class UserManageServlet extends HttpServlet {
         // once click on the edit button will function 
         String edit = request.getParameter("edit");
         if (edit != null && !edit.isEmpty()) {
-
-            User editUser = new User();
             int editid = Integer.parseInt(request.getParameter("id"));
             String editname = request.getParameter("name");
             String editemail = request.getParameter("email");
             String editaddress = request.getParameter("address");
-            editUser.setId(editid);
-            editUser.setName(editname);
-            editUser.setEmail(editemail);
-            editUser.setAddress(editaddress);
-
-            // Set in session scope
-            HttpSession session = request.getSession();
-            session.setAttribute("user", editUser);
+            setSession(editid, editname, editemail, editaddress, request, response);
 
             request.getRequestDispatcher("WEB-INF/UserEdit.jsp").forward(request, response);
             return;
@@ -121,10 +114,23 @@ public class UserManageServlet extends HttpServlet {
             }
         }
 
+
         String sql = "SELECT * FROM users ORDER BY " + sortBy + " " + sortOrder; //Display user list
         request.setAttribute("users", user.getUsers(sql));
         request.setAttribute("sortBy", sortBy);
         request.setAttribute("sortOrder", sortOrder);
         request.getRequestDispatcher("WEB-INF/UserManage.jsp").forward(request, response);
+    }
+
+    public void setSession(int editid, String editname, String editemail, String editaddress, HttpServletRequest request, HttpServletResponse response) {
+        User editUser = new User();
+        editUser.setId(editid);
+        editUser.setName(editname);
+        editUser.setEmail(editemail);
+        editUser.setAddress(editaddress);
+
+        // Set in session scope
+        HttpSession session = request.getSession();
+        session.setAttribute("user", editUser);
     }
 }

@@ -141,7 +141,7 @@
                 <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button><br>
 
                 <form action="ReportServlet" method="GET">
-                    <input type="submit" value="Top Sales Product" class="twobutton">
+                    <input type="submit" value="Top Sales 10 Product" class="twobutton">
                     <input type="hidden" name="product" value="product">
                 </form>
                 <form action="ReportServlet" method="GET">
@@ -247,23 +247,24 @@
         //Bar Chart script
         <%
             boolean isProductMode = product != null && !product.isEmpty();
+            int loopsize = Math.min(barChart.size(), 10);
         %>
 
         const xValues = [<%
-            for (int i = 0; i < barChart.size(); i++) {
+            for (int i = 0; i < loopsize; i++) {
                 HashMap<String, String> item = barChart.get(i);
                 out.println("\"" + item.get(isProductMode ? "product" : "category") + "\"");
-                if (i < barChart.size() - 1) {
+                if (i < loopsize - 1) {
                     out.println(", ");
                 }
             }
         %>];
 
         const yValues = [<%
-            for (int i = 0; i < barChart.size(); i++) {
+            for (int i = 0; i < loopsize; i++) {
                 HashMap<String, String> item = barChart.get(i);
                 out.println(item.get("totalSales"));
-                if (i < barChart.size() - 1) {
+                if (i < loopsize - 1) {
                     out.println(", ");
                 }
             }
@@ -288,12 +289,12 @@
                     yAxes: [{
                             ticks: {
                                 beginAtZero: true,
-                                fontSize: 16
+                                fontSize: 12
                             }
                         }],
                     xAxes: [{
                             ticks: {
-                                fontSize: 16
+                                fontSize: 12
                             }
                         }]
                 },
@@ -303,15 +304,15 @@
             if (product != null && !product.isEmpty()) {
                 if (barChart != null && !barChart.isEmpty()) {
                     if (from == null && to == null) {
-                        chartTitle = "Bar Chart of Top Sales Product";
+                        chartTitle = "Bar Chart of Top 10 Sales Product";
                     } else if (from != null && to != null && from.equals(to)) {
-                        chartTitle = "Bar Chart of Top Sales Product at " + from;
+                        chartTitle = "Bar Chart of Top 10 Sales Product at " + from;
                     } else if (from != null && to == null) {
-                        chartTitle = "Bar Chart of Top Sales Product after " + from;
+                        chartTitle = "Bar Chart of Top 10 Sales Product after " + from;
                     } else if (to != null && from == null) {
-                        chartTitle = "Bar Chart of Top Sales Product before " + to;
+                        chartTitle = "Bar Chart of Top 10 Sales Product before " + to;
                     } else {
-                        chartTitle = "Bar Chart of Top Sales Product from (" + from + " to " + to + ")";
+                        chartTitle = "Bar Chart of Top 10 Sales Product from (" + from + " to " + to + ")";
                     }
                 } else {
                     chartTitle = "No record";

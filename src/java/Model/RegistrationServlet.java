@@ -17,7 +17,7 @@ import Util.registrationValidator;
 
 @WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
-    
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
@@ -40,78 +40,75 @@ public class RegistrationServlet extends HttpServlet {
             String password = request.getParameter("password");
             String repass = request.getParameter("repass");
             String address = request.getParameter("address");
-            
-            
+
             request.getSession().setAttribute("name", name);
             request.getSession().setAttribute("email", email);
             request.getSession().setAttribute("address", address);
-            
+
             //Check if username format is valid ; NOTICE
-                if (!registrationValidator.isValidUsername(name)) { 
-                    Utils.showAlert(out, "Invalid username format! Username must have at least 4 characters and an Uppercase letter ",
-                            request, response, "controller?action=register");
-                    return;
-                }           
+            if (!registrationValidator.isValidUsername(name)) {
+                Utils.showAlert(out, "Invalid username format! Username must have at least 4 characters and an Uppercase letter ",
+                        request, response, "controller?action=register");
+                return;
+            }
 
             //Check if email format is valid ; NOTICE
-                if (!registrationValidator.isValidEmail(email)) { 
-                    Utils.showAlert(out, "Invalid email format! Please use a correct format (e.g., PCforge123@sample.com).",
-                            request, response, "controller?action=register");
-                    return;
-                }  
-                
-            //Check if password format is valid ; NOTICE
-                if (!registrationValidator.isValidPassword(password)) { 
-                    Utils.showAlert(out, "Invalid password format! Password must have at least 8 characters,"
-                            + " one alphabetic letter and one numeric letter.",
-                            request, response, "controller?action=register");
-                    return;
-                }           
+            if (!registrationValidator.isValidEmail(email)) {
+                Utils.showAlert(out, "Invalid email format! Please use a correct format (e.g., PCforge123@sample.com).",
+                        request, response, "controller?action=register");
+                return;
+            }
 
+            //Check if password format is valid ; NOTICE
+            if (!registrationValidator.isValidPassword(password)) {
+                Utils.showAlert(out, "Invalid password format! Password must have at least 8 characters,"
+                        + " one alphabetic letter and one numeric letter.",
+                        request, response, "controller?action=register");
+                return;
+            }
 
             //Check if password match confirmation
-                if (!registrationValidator.passwordsMatch(password, repass)) {
-                    Utils.showAlert(out, "Passwords do not match!", request, response, "controller?action=register");
-                    return;
-                }
-                
+            if (!registrationValidator.passwordsMatch(password, repass)) {
+                Utils.showAlert(out, "Passwords do not match!", request, response, "controller?action=register");
+                return;
+            }
+
             // Check if username,email,password already exists ; NOTICE
             String checkSql = "SELECT name, email, password FROM Users WHERE name = ? OR email = ? OR password = ?";
             String hashedPassword = Utils.hashPassword(password); // Use method from Utils
-            
+
             try (PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
                 checkPs.setString(1, name);
                 checkPs.setString(2, email);
-                checkPs.setString(3,hashedPassword);
-             
+                checkPs.setString(3, hashedPassword);
+
                 ResultSet rs = checkPs.executeQuery();
 
                 if (rs.next()) {
-                if (name.equals(rs.getString("name"))) {
-                     Utils.showAlert(out, "Your Username has already taken!", request, response, "controller?action=register");
-                   return;
+                    if (name.equals(rs.getString("name"))) {
+                        Utils.showAlert(out, "Your Username has already taken!", request, response, "controller?action=register");
+                        return;
+                    }
+                    if (email.equals(rs.getString("email"))) {
+                        Utils.showAlert(out, "Your Email has already taken!", request, response, "controller?action=register");
+                        return;
+                    }
+                    if (hashedPassword.equals(rs.getString("password"))) {
+                        Utils.showAlert(out, "Your password has already been used! Please choose a different one.", request, response, "controller?action=register");
+                        return;
+                    }
                 }
-                if (email.equals(rs.getString("email"))) {
-                     Utils.showAlert(out, "Your Email has already taken!", request, response, "controller?action=register");
-                   return;
-                }
-                if (hashedPassword.equals(rs.getString("password"))) {
-                     Utils.showAlert(out, "Your password has already been used! Please choose a different one.", request, response, "controller?action=register");
-                   return;
-                }
-             }                  
             } catch (SQLException e) {
                 e.printStackTrace();
                 Utils.showAlert(out, "Database error occurred!", request, response, "controller?action=register");
                 return;
             }
 
-            
-
-            if (address == null) address = "";  //Address could be OPTIONAL, blank space
-
+            if (address == null) {
+                address = "";  //Address could be OPTIONAL, blank space
+            }
             String sql = "INSERT INTO Users (name, email, password, address, created_at) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
-            
+
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, name);
                 ps.setString(2, email);

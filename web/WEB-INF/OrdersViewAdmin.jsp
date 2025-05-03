@@ -212,10 +212,11 @@
                   <form method="post" action="UpdateOrderStatusServlet" onsubmit="return confirmStatusChange(this);">
                     <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
                     <select name="newStatus" required>
-                      <option value="">--</option>
                       <option value="Packaging" <%= "Packaging".equals(order.getStatus()) ? "selected" : "" %>>Packaging</option>
                       <option value="Shipping"  <%= "Shipping".equals(order.getStatus())  ? "selected" : "" %>>Shipping</option>
-                      <option value="Delivery"  <%= "Delivery".equals(order.getStatus())  ? "selected" : "" %>>Delivery</option>
+                      <option value="Delivering"  <%= "Delivering".equals(order.getStatus())  ? "selected" : "" %>>Delivering</option>
+                      <option value="Delivered"  <%= "Delivered".equals(order.getStatus())  ? "selected" : "" %>>Delivered</option>
+                      <option value="Cancelled"  <%= "Cancelled".equals(order.getStatus())  ? "selected" : "" %>>Cancelled</option>
                     </select>
                     <button type="submit" class="btn">Update</button>
                   </form>

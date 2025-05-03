@@ -89,7 +89,7 @@
                 <form action="StaffAccountManageServlet" method="post">
                     <div class="form-group">
                     <label>Username: </label>
-                    <input type="text" name="username" value="<%= adminname %>" readonly><br><br>
+                    <input type="text" name="username" value="<%= adminname %>" disabled><br><br>
                     </div>
                     <div class="form-group">
                     <label>New Password: </label>

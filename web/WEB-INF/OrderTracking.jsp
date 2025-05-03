@@ -122,7 +122,7 @@
         <%
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         %>
-        <button type="button" class='back-btn' onclick="history.back();" style="width:80px;height:40px;">Back</button>
+        <button type="button" class='back-btn' onclick="location.href = 'controller?';" style="width:80px;height:40px;">Back</button>
         <div class="orders-wrapper">
             <h2>Your Orders</h2>
 

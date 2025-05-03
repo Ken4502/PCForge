@@ -101,8 +101,9 @@
             <div class="form-container">
                 <button onclick="history.back()" class="backbutton">Back</button>
                 <h1>Edit User</h1>
-                <form action="UserManageServlet" method="post" id="userForm" onsubmit="return validateForm();">
+                <form action="UserManageServlet" method="post" id="userForm">
                     <label>ID:</label>
+                    <input type="hidden" name="edituser" value="edituser">
                     <input type="text" value="<%= user.getId()%>" disabled>
                     <input type="hidden" name="userid" value="<%= user.getId()%>">
 
@@ -121,5 +122,5 @@
                 </form>
             </div>
         </div>
-    </body>
+    </body> 
 </html>

@@ -21,8 +21,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "UserProfileServlet", urlPatterns = {"/UserProfileServlet"})
 public class UserProfileServlet extends HttpServlet {
 
-    UserDAO user = new UserDAO();
-    User edituser = new User();
+    UserDAO user;
+    User edituser;
 
     @Override
     public void init() throws ServletException {
@@ -85,7 +85,6 @@ public class UserProfileServlet extends HttpServlet {
                 String error = user.editUser(id, editname, editemail, editaddress);
                 Utils.remainPage(out, error, request, response);    //if error, remain the page
             }
-            request.getRequestDispatcher("WEB-INF/UserProfile.jsp").forward(request, response);
         }
 
     }   

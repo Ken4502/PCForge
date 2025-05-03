@@ -45,7 +45,6 @@ public class UserDAO {
                 user.put("id", String.valueOf(rs.getString("id")));
                 user.put("name", rs.getString("name"));
                 user.put("email", rs.getString("email"));
-                user.put("password", rs.getString("password"));
                 user.put("address", rs.getString("address"));
                 Timestamp timestamp = rs.getTimestamp("created_at");
                 LocalDateTime dateTime = timestamp.toLocalDateTime();
@@ -93,7 +92,6 @@ public class UserDAO {
                 if (email.equals(rs.getString("email"))) {
                     return "Your Email has already taken!";
                 }
-                return "Duplicate user found !!";
             }
 
             //Start insert 
@@ -116,14 +114,15 @@ public class UserDAO {
         return "Insert failed !!";
     }
 
-    public String checkSameUser(String name, String email) {
+    public String checkSameUser(String name, String email, String id) {
 
         // Check if username,email,password already exists ; NOTICE
-        String checkSql = "SELECT name, email, password FROM Users WHERE name = ? OR email = ?";
+        String checkSql = "SELECT name, email, password FROM users WHERE (name = ? OR email = ?) AND id != ?";
 
         try (PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
             checkPs.setString(1, name);
             checkPs.setString(2, email);
+            checkPs.setString(3,id);
 
             ResultSet rs = checkPs.executeQuery();
 
@@ -142,10 +141,13 @@ public class UserDAO {
     }
 
     public String editUser(String id, String name, String email, String address) {
+        String validate = "no error";
         if (!registrationValidator.isValidUsername(name)) {
             return "Invalid username format! Username must have at least 4 characters and an Uppercase letter";
         } else if (!registrationValidator.isValidEmail(email)) {
-            return "Invalid email format! Please use a correct format (e.g., PCforge123@sample.com";
+            return "Invalid email format! Please use a correct format (e.g., PCforge123@sample.com)";
+        } else if (!checkSameUser(name, email,id).equals(validate)) {
+            return checkSameUser(name, email,id);
         } else {
             String sql = "UPDATE users SET name = ?, email = ?, address = ? WHERE id = ?";
             try {
@@ -171,7 +173,7 @@ public class UserDAO {
             PreparedStatement orderItemStmt = conn.prepareStatement(sqlOrderItem);
             orderItemStmt.setInt(1, Integer.parseInt(id));
             orderItemStmt.executeUpdate();
-            
+
             String sqlOrder = "DELETE FROM orders WHERE user_id = ?";
             PreparedStatement orderStmt = conn.prepareStatement(sqlOrder);
             orderStmt.setInt(1, Integer.parseInt(id));
