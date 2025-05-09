@@ -2,6 +2,6 @@
 <glassfish-web-app xmlns="http://xmlns.jcp.org/xml/ns/glassfish-web-app"
                    version="4.0">
     <!-- Set custom context root -->
-    <context-root>/PCForgeAssignment</context-root>
+    <context-root>PCForgeAssignment</context-root>
 
 </glassfish-web-app>
