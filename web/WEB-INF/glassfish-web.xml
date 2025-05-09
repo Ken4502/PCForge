@@ -1,9 +1,7 @@
-<glassfish-web-app error-url="">
-  <context-root>/PCForgeAssignment</context-root>
-  <class-loader delegate="true"/>
-  <jsp-config>
-    <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
-    </property>
-  </jsp-config>
+<?xml version="1.0" encoding="UTF-8"?>
+<glassfish-web-app xmlns="http://xmlns.jcp.org/xml/ns/glassfish-web-app"
+                   version="4.0">
+    <!-- Set custom context root -->
+    <context-root>/PCForgeAssignment</context-root>
+
 </glassfish-web-app>
