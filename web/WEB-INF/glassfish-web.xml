@@ -1,5 +1,5 @@
 <glassfish-web-app error-url="">
-  <context-root>/</context-root>
+  <context-root>/PCForgeAssignment</context-root>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
