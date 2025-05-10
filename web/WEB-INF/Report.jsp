@@ -18,13 +18,7 @@
 %>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="BodyStyle.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
-        <title>Report</title>
-    </head>
-    <style>
+        <style>
         * {
             font-family: sans-serif;
             color: black;
@@ -129,7 +123,46 @@
             background-color: #339AFF; /* lighter on hover */
             transform: translateY(-2px); /* subtle lift on hover */
         }
+        
+        @media print {
+            @page {
+              size: A4 landscape; /* or just: landscape */
+              margin: 10mm;
+            }
+
+            body {
+              margin-top: -300;
+              zoom: 80%; /* Adjust zoom to fit content on one page */
+            }
+            header {
+                display: none;
+            }
+            .btn {
+                display: none;
+            }
+            button {
+                display: none;
+            }
+            input {
+                display: none;
+            }
+            #FromTo {
+                display: none;
+            }
+            .form-container{
+                padding: 0;
+                margin: -50;
+                border-radius: 0;
+                width: 100%
+            }
+        }
     </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="BodyStyle.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+        <title>Report</title>
+    </head>
     <body>
         <div class="container">
             <div class="form-container">   
@@ -139,6 +172,7 @@
                 <h1>Top Sales Category Report</h1>
                 <% }%>
                 <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button><br>
+                <button type="button" class="btn" id="printButton" onclick="window.print()">Print the report</button>
 
                 <form action="ReportServlet" method="GET">
                     <input type="submit" value="Top Sales 10 Product" class="twobutton">
@@ -148,7 +182,7 @@
                     <input type="submit" value="Top Sales Category" class="twobutton">
                 </form>
 
-                <form action="ReportServlet" method="GET">
+                <form action="ReportServlet" method="GET" id="FromTo">
                     From
                     <input type="date" name="from" id="from" value="<%=from != null ? from : ""%>">
                     to
@@ -182,7 +216,7 @@
                                 <td><%=i + 1%>. <%= item.get("category")%></td>
                                 <% }%>
                                 <th>RM</th>
-                                <th style="text-align:right;"> <%= item.get("totalSales")%></th>
+                                <th style="text-align:right;"> <%= String.format("%.2f", Double.parseDouble((String) item.get("totalSales")))%></th>
                             </tr>
                             <% }%>
                             <% }%>
