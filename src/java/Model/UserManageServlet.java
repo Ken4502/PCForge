@@ -86,7 +86,7 @@ public class UserManageServlet extends HttpServlet {
                 Utils.showAlert(out, "Insert successfull !!", request, response, "controller?action=usermanage");
             } else {
                 String error = user.addUser(name, email, address, password, confirmpassword);
-                Utils.remainPage(out, error, request, response);    //if error, remain the page
+                Utils.showAlert(out, error, request, response,"controller?action=usermanage");   
             }
         }
 

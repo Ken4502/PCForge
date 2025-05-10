@@ -48,7 +48,6 @@ public class Utils {
         out.println("<script type='text/javascript'>");
         out.println("alert('" + message + "');");
         out.println("window.history.back();");
-        out.println("window.history.back();");
         out.println("</script>");
     }
 

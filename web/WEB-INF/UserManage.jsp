@@ -22,9 +22,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User Manage</title>
-
-    </head>
-    <style>
+<style>
         .sort-arrow {
                 cursor: pointer;
                 font-size: 14px;
@@ -196,6 +194,8 @@
 
 
     </style>
+    </head>
+    
     <body>
         <div class="container">
             <div class="form-container">

@@ -109,6 +109,7 @@
                        onchange="checkCartChanges(<%= idx %>)"
                        data-orig="<%= qty %>">
                 <input type="hidden" name="product_id_<%= idx %>" value="<%= id %>">
+
                 <input type="hidden" name="name_<%= idx %>" value="<%= name %>">
                 <input type="hidden" name="price_<%= idx %>" value="<%= price %>">
               </td>

@@ -184,7 +184,9 @@ public class PageControl extends HttpServlet {
                     (List<HashMap<String, String>>) session.getAttribute("selectedProducts");
 
                 if (selectedProducts == null || selectedProducts.isEmpty()) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No products selected.");
+                    request.setAttribute("message", "No products selected for checkout.");
+                    request.setAttribute("selectedProducts", new ArrayList<>()); // Optional: empty list to avoid null
+                    request.getRequestDispatcher("/WEB-INF/CheckoutConfirmation.jsp").forward(request, response);
                     return;
                 }
 
