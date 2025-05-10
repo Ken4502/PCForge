@@ -91,6 +91,7 @@
             <%
               int idx = 0, count = 1;
               for (HashMap<String,String> item : cart) {
+                int id = Integer.parseInt(item.get("id"));
                 String name = item.get("name");
                 double price = Double.parseDouble(item.get("price"));
                 int qty = Integer.parseInt(item.get("quantity"));
@@ -107,6 +108,7 @@
                        min="1"
                        onchange="checkCartChanges(<%= idx %>)"
                        data-orig="<%= qty %>">
+                <input type="hidden" name="product_id_<%= idx %>" value="<%= id %>">
                 <input type="hidden" name="name_<%= idx %>" value="<%= name %>">
                 <input type="hidden" name="price_<%= idx %>" value="<%= price %>">
               </td>

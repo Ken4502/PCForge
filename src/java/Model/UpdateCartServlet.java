@@ -20,6 +20,7 @@ public class UpdateCartServlet extends HttpServlet {
 
         for (int i = 0; i < totalItems; i++) {
             String name = request.getParameter("name_" + i);
+            String id = request.getParameter("product_id_" + i);
             String price = request.getParameter("price_" + i);
             String quantity = request.getParameter("quantity_" + i);
             String remove = request.getParameter("remove_" + i);
@@ -27,6 +28,7 @@ public class UpdateCartServlet extends HttpServlet {
             // Skip item if remove checkbox is checked
             if (remove == null) {
                 HashMap<String, String> item = new HashMap<>();
+                item.put("id", id);
                 item.put("name", name);
                 item.put("price", price);
                 item.put("quantity", quantity);

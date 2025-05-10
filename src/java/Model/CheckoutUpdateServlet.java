@@ -43,6 +43,7 @@ public class CheckoutUpdateServlet extends HttpServlet {
                 return;
             }
             
+            
             String deliveryFee = request.getParameter("deliveryFee");
             String serviceTax  = request.getParameter("serviceTax");
             String grandTotal = request.getParameter("grandTotal");
@@ -53,6 +54,7 @@ public class CheckoutUpdateServlet extends HttpServlet {
             session.setAttribute("grandTotal", grandTotal);
             session.setAttribute("selectedProducts", selectedProducts);
             System.out.println("Selected products stored in session: " + selectedProducts.size());
+            
             System.out.println("deliveryFee: " + deliveryFee);
             System.out.println("serviceTax: " + serviceTax);
             System.out.println("grandTotal: " + grandTotal);
