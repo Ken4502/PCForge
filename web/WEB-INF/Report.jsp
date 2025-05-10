@@ -131,7 +131,7 @@
             }
 
             body {
-              margin-top: -300;
+              margin-top: -100;
               zoom: 80%; /* Adjust zoom to fit content on one page */
             }
             header {
@@ -172,7 +172,6 @@
                 <h1>Top Sales Category Report</h1>
                 <% }%>
                 <button type="button" class="btn" onclick="location.href = 'controller?';">Back</button><br>
-                <button type="button" class="btn" id="printButton" onclick="window.print()">Print the report</button>
 
                 <form action="ReportServlet" method="GET">
                     <input type="submit" value="Top Sales 10 Product" class="twobutton">
@@ -252,10 +251,11 @@
                     </tr>
                     <tr>
                         <th>Total sales </th>
-                        <td>: RM<%= totalsales%></td>
+                        <td>: RM<%= String.format("%.2f", totalsales) %></td>
                     </tr>
                 </table>
             </div>
+            <button type="button" class="btn" id="printButton" onclick="window.print()">Print the report</button>
         </div>            
     </body>
 
